@@ -7,9 +7,6 @@ var APP_DIR = path.resolve(__dirname, 'src/client/app');
 
 var config = {
     entry: [
-        'react-hot-loader',
-        'webpack-hot-middleware/client?path=http://localhost:3005/__webpack_hmr',
-        'webpack/hot/dev-server',
         'babel-polyfill', APP_DIR + '/index.tsx'
     ],
     output: {
@@ -64,10 +61,7 @@ var config = {
             'process.env': {
                 'NODE_ENV': JSON.stringify('production')
             }
-        }),
-
-        new webpack.HotModuleReplacementPlugin()
-
+        })
     ],
     cache: true,
     debug: true
