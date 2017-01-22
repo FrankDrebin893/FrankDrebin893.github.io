@@ -20,9 +20,6 @@ var reduxRouter = require('react-router-redux')
 import '../public/sass/master.scss';
 import TopNavBarContainer from './containers/navigation/TopNavBarContainer';
 import { setLanguage } from './actions/app-actions';
-import {AppContainer} from 'react-hot-loader';
-
-console.log(AppContainer);
 
 
 export interface IAppProps {
@@ -72,7 +69,6 @@ ReactDOM.render(
                     <Route path="music" component={MusicView} />
                     <Route path="projects" component={ProjectView} />
                     <Route path="lol" component={MusicView} />
-
                 </Route>
             </Router>
         </Provider>, document.getElementById('root'));
