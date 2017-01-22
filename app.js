@@ -8,19 +8,6 @@ const webpackConfig = require('./webpack.config.js');
 
 const compiler = webpack(webpackConfig);
 
-app.use(require('webpack-dev-middleware')(compiler, {
-  hot: true,
-  stats: {
-    colors: true
-  }
-}));
-
-app.use(require('webpack-hot-middleware')(compiler, {
-  log: console.log,
-  path: '/__webpack_hmr',
-  heartbeat: 10 * 1000
-}));
-
 //app.use('/public', express.static(path.join(__dirname, 'src/client/public')));
 //app.use(express.static(__dirname + '/src/client/public'));
 

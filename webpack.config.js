@@ -19,7 +19,7 @@ var config = {
         loaders: [{
             test: /\.jsx?/,
             include: APP_DIR,
-            loaders: ['react-hot', 'babel']
+            loaders: ['babel']
         }, {
             test: /\.json$/,
             loader: "json-loader"
