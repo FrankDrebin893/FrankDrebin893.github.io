@@ -17,7 +17,7 @@ app.get('*', function (req, res) {
 })*/
 
 app.get('*', function (request, response){
-  response.sendFile(path.resolve(__dirname, 'src/client/public', 'indexTwo.html'))
+  response.sendFile(path.resolve(__dirname, 'src/client/public', 'index.html'))
 })
 
 var server = app.listen(port, function () {
