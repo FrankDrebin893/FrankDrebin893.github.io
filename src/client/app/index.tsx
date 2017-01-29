@@ -20,6 +20,7 @@ var reduxRouter = require('react-router-redux')
 import '../public/sass/master.scss';
 import TopNavBarContainer from './containers/navigation/TopNavBarContainer';
 import { setLanguage } from './actions/app-actions';
+console.log("Running app");
 
 
 export interface IAppProps {

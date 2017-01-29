@@ -9102,8 +9102,9 @@
 	var reduxRouter = __webpack_require__(/*! react-router-redux */ 507);
 	// Style
 	__webpack_require__(/*! ../public/sass/master.scss */ 568);
-	const TopNavBarContainer_1 = __webpack_require__(/*! ./containers/navigation/TopNavBarContainer */ 573);
+	const TopNavBarContainer_1 = __webpack_require__(/*! ./containers/navigation/TopNavBarContainer */ 572);
 	const app_actions_1 = __webpack_require__(/*! ./actions/app-actions */ 506);
+	console.log("Running app");
 	;
 	;
 	class App extends React.Component {
@@ -37397,7 +37398,7 @@
 	var content = __webpack_require__(/*! !./../../../../~/css-loader!./../../../../~/sass-loader!./master.scss */ 569);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(/*! ./../../../../~/style-loader/addStyles.js */ 572)(content, {});
+	var update = __webpack_require__(/*! ./../../../../~/style-loader/addStyles.js */ 571)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -37490,8 +37491,7 @@
 
 
 /***/ },
-/* 571 */,
-/* 572 */
+/* 571 */
 /*!*************************************!*\
   !*** ./~/style-loader/addStyles.js ***!
   \*************************************/
@@ -37746,7 +37746,7 @@
 
 
 /***/ },
-/* 573 */
+/* 572 */
 /*!*********************************************************************!*\
   !*** ./src/client/app/containers/navigation/TopNavBarContainer.tsx ***!
   \*********************************************************************/
@@ -37754,7 +37754,7 @@
 
 	"use strict";
 	const react_redux_1 = __webpack_require__(/*! react-redux */ 463);
-	const TopNavBar_1 = __webpack_require__(/*! ../../components/navigation/TopNavBar */ 574);
+	const TopNavBar_1 = __webpack_require__(/*! ../../components/navigation/TopNavBar */ 573);
 	const mapStateToProps = (state, ownProps) => {
 	    console.log("Ownprops: ", ownProps);
 	    return {
@@ -37766,7 +37766,7 @@
 
 
 /***/ },
-/* 574 */
+/* 573 */
 /*!************************************************************!*\
   !*** ./src/client/app/components/navigation/TopNavBar.tsx ***!
   \************************************************************/
