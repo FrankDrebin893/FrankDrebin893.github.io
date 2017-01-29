@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 interface ITopNavBarProps extends IAppProps { lang:string };
 
 interface ITopNavBarState { };
-
+console.log("Entered top nav bar");
 class TopNavBar extends React.Component<ITopNavBarProps, ITopNavBarState> {
     public render(): JSX.Element {
         return (
