@@ -22,7 +22,7 @@ import '../public/sass/master.scss';
 import TopNavBarContainer from './containers/navigation/TopNavBarContainer';
 import { setLanguage } from './actions/app-actions';
 console.log("Running app");
-
+console.log("New version");
 
 export interface IAppProps {
     params: {
