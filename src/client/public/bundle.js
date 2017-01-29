@@ -9103,7 +9103,7 @@
 	console.log("Running app log before style gets applied");
 	// Style
 	__webpack_require__(/*! ../public/sass/master.scss */ 568);
-	const TopNavBarContainer_1 = __webpack_require__(/*! ./containers/navigation/TopNavBarContainer */ 572);
+	//import TopNavBarContainer from './containers/navigation/TopNavBarContainer';
 	const app_actions_1 = __webpack_require__(/*! ./actions/app-actions */ 506);
 	console.log("Running app");
 	;
@@ -9118,8 +9118,8 @@
 	        //history.listen(location => reduxRouter.analyticsService.track(location.pathname));
 	    }
 	    render() {
+	        console.log("Rendering app");
 	        return (React.createElement("div", { id: "app-container" },
-	            React.createElement(TopNavBarContainer_1.default, null),
 	            React.createElement("div", { id: "app-content" },
 	                React.createElement("main", null, this.props.children))));
 	    }
@@ -37744,51 +37744,6 @@
 		if(oldSrc)
 			URL.revokeObjectURL(oldSrc);
 	}
-
-
-/***/ },
-/* 572 */
-/*!*********************************************************************!*\
-  !*** ./src/client/app/containers/navigation/TopNavBarContainer.tsx ***!
-  \*********************************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	const react_redux_1 = __webpack_require__(/*! react-redux */ 463);
-	const TopNavBar_1 = __webpack_require__(/*! ../../components/navigation/TopNavBar */ 573);
-	const mapStateToProps = (state, ownProps) => {
-	    console.log("Ownprops: ", ownProps);
-	    return {
-	        lang: state.appState.lang
-	    };
-	};
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = react_redux_1.connect(mapStateToProps)(TopNavBar_1.default);
-
-
-/***/ },
-/* 573 */
-/*!************************************************************!*\
-  !*** ./src/client/app/components/navigation/TopNavBar.tsx ***!
-  \************************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	const React = __webpack_require__(/*! react */ 299);
-	const react_router_1 = __webpack_require__(/*! react-router */ 515);
-	;
-	;
-	class TopNavBar extends React.Component {
-	    render() {
-	        return (React.createElement("nav", { id: "top-nav-bar" },
-	            React.createElement("div", { id: "nav-links" },
-	                React.createElement(react_router_1.Link, { to: "/" + this.props.lang + "/about" }, "About"),
-	                React.createElement(react_router_1.Link, { to: "/" + this.props.lang + "/music" }, "Music"),
-	                React.createElement(react_router_1.Link, { to: "/" + this.props.lang + "/projects" }, "Software portfolio"))));
-	    }
-	}
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = TopNavBar;
 
 
 /***/ }
