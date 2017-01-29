@@ -19,7 +19,7 @@ var config = {
         loaders: [{
             test: /\.jsx?/,
             include: APP_DIR,
-            loaders: ['babel']
+            loader: "babel"
         }, {
             test: /\.json$/,
             loader: "json-loader"
@@ -66,7 +66,7 @@ var config = {
     cache: true,
     debug: true
 };
-/*
+
 if (process.env.NODE_ENV === 'production') {
     config.plugins.push(
         new webpack.optimize.UglifyJsPlugin({
@@ -75,6 +75,6 @@ if (process.env.NODE_ENV === 'production') {
             }
         })
     )
-}*/
+}
 
 module.exports = config;
