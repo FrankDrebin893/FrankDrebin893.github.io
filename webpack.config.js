@@ -25,7 +25,7 @@ var config = {
             loader: "json-loader"
         }, {
             test: /\.tsx?$/,
-            loader: 'ts-loader'
+            loader: 'babel!ts-loader'
         }, {
             test: /\.css$/,
             loader: "style-loader!css-loader"
