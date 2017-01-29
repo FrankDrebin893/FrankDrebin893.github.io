@@ -16,6 +16,7 @@ import {
 } from 'react-router';
 var reduxRouter = require('react-router-redux')
 
+console.log("Running app log before style gets applied");
 // Style
 import '../public/sass/master.scss';
 import TopNavBarContainer from './containers/navigation/TopNavBarContainer';

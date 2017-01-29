@@ -9100,6 +9100,7 @@
 	const ProjectView_1 = __webpack_require__(/*! ./components/views/projects/ProjectView */ 514);
 	const react_router_1 = __webpack_require__(/*! react-router */ 515);
 	var reduxRouter = __webpack_require__(/*! react-router-redux */ 507);
+	console.log("Running app log before style gets applied");
 	// Style
 	__webpack_require__(/*! ../public/sass/master.scss */ 568);
 	const TopNavBarContainer_1 = __webpack_require__(/*! ./containers/navigation/TopNavBarContainer */ 572);
