@@ -19,7 +19,7 @@ var reduxRouter = require('react-router-redux')
 console.log("Running app log before style gets applied");
 // Style
 import '../public/sass/master.scss';
-//import TopNavBarContainer from './containers/navigation/TopNavBarContainer';
+import TopNavBarContainer from './containers/navigation/TopNavBarContainer';
 import { setLanguage } from './actions/app-actions';
 console.log("Running app");
 
@@ -49,7 +49,7 @@ class App extends React.Component<IAppProps, IAppState> {
         console.log("Rendering app");
         return (
             <div id="app-container">
-                {/*<TopNavBarContainer />*/}
+                <TopNavBarContainer />
                 <div id="app-content">
                     <main>
                         {this.props.children}
