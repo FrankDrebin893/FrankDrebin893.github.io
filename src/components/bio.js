@@ -31,7 +31,7 @@ const Bio = () => {
         </a>
         and <a href="https://github.com/FrankDrebin893">Github</a>. I also post terrible sound bites to{" "}
         <a href="https://soundcloud.com/rasmus-valbro-h-jte">Soundcloud</a> and{" "}
-        <a href="https://soundcloud.com/rasmus-valbro-h-jte">YouTube</a>
+        <a href="https://www.youtube.com/@Cruize91/videos">YouTube</a>
       </p>
     </div>
   )
