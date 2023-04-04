@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Rasmus Valbro Højte's personal site Feed]]></title><description><![CDATA[Rasmus Valbro Højte's personal blog]]></description><link>https://hojte.net</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 04 Apr 2023 20:21:04 GMT</lastBuildDate><item><title><![CDATA[How to fetch a certificate thumbprint from Azure Key Vault in your Azure DevOps pipelines]]></title><description><![CDATA[If you for whatever reason need to read your certificates thumbprint(or other public certificate information), such as when deploying to an…]]></description><link>https://hojte.net/how-to-fetch-a-certificate-thumbprint-from-azure-key-vault-in-your-azure-devops-pipelines/</link><guid isPermaLink="false">https://hojte.net/how-to-fetch-a-certificate-thumbprint-from-azure-key-vault-in-your-azure-devops-pipelines/</guid><pubDate>Sun, 20 Feb 2022 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;If you for whatever reason need to read your certificates thumbprint(or other public certificate information), such as when deploying to an on-premise environment, then this post can help you.&lt;/p&gt;
+&lt;p&gt;I needed to do this because we have to feed the IIS Management task the thumbprint for the certificate installed on the server to run HTTPS.&lt;/p&gt;
+&lt;h2&gt;First method: Using the Azure PowerShell Task&lt;/h2&gt;
+&lt;p&gt;This method is definitely a little more cumbersome than the second method, but will be safer, if you don’t want to expose your entire PFX, including secrets. This method instead basis itself on creating a service principal with only rights to read public information about your certificate. On the other hand, linking an Azure DevOps library to a Key Vault requires permission to read secrets as well.&lt;/p&gt;
+&lt;h3&gt;Prerequisites&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;This method uses the &lt;a href=&quot;https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/deploy/azure-powershell?view=azure-devops&quot;&gt;Azure PowerShell task&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Key Vault set up with certificate already set up&lt;/li&gt;
+&lt;li&gt;If you run on Azure’s deployment agents, you can ignore this bullet, but if you run your own agents, you need to install the &lt;a href=&quot;https://docs.microsoft.com/en-us/powershell/azure/install-az-ps?view=azps-7.1.0&quot;&gt;Azure PowerShell Module&lt;/a&gt;, and ensure you run a sufficient version of PowerShell(7.1.0~ at the time of writing)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Pipeline setup&lt;/h3&gt;
+&lt;p&gt;Add an Azure PowerShell task to your pipeline. Configure it as an inline script.&lt;/p&gt;
+&lt;p&gt;Give the task a service connection with a certificate read access principal. See more on this in the next section. Choose to use the latest version of PowerShell.&lt;/p&gt;
+&lt;p&gt;Add the following script, but replace the variable with your own key vault name and certificate name:&lt;/p&gt;
+&lt;p&gt;$Thumbprint = (Get-AzKeyVaultCertificate -VaultName “ReplaceWithKeyVaultName” -Name “ReplaceWithCertificateName”).Thumbprint&lt;/p&gt;
+&lt;p&gt;Write-Host “The thumbprint is $Thumbprint”&lt;/p&gt;
+&lt;p&gt;Write-Host “##vso[task.setvariable variable=Tp]$Thumbprint”&lt;/p&gt;
+&lt;p&gt;This script will grab the certificate’s public info, and set the Thumbprint variable with the certificate’s thumbprint value.&lt;/p&gt;
+&lt;p&gt;The task.setvariable function is a logging command that allows you to assign a pipeline variable at runtime. In this case we pipe it into a variable that’ll be accessible as $(Tp), which can be used like any other pipeline variable wherever you need it.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/8b594a37b5c210c8015c500e45325f29/2bef9/logged_output-1024x339.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 32.911392405063296%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAHCAYAAAAIy204AAAACXBIWXMAAAsTAAALEwEAmpwYAAABP0lEQVQoz4WQy26cQBBFm+4GBmiezYBnTPMSITOxFTlW/v/Xjg2MpSwSZXFUtblXp0rY2rJRVCVKK6SS+9S+3lFKobX+J77vY60lSQxVZRHd5LgOHZf+SmZznroLVWNJCkOSG4wxnE6nPbyV/w3P8xBCUNQN4vf7L97f3vj5+kJdlazLwjwOXNqWp7Yhz1N8X+2B/7IVN/1K4xZq942iGYjLC2ndUbQ9qb0SFy1RVqPjEhmmqCBCBjFChQfSR6gAoSOEkIjl+51lvbHeXnDDzDAtzMtK50Y6N9CPM+O80I8TwzAxjdP+s8PK+8PwsefuB3l3I3OvZM93KnfD9ndMMxJkZ5Q5I5MzXlQgQ7NbiiBF6Pgwk8ExNzyJCIucMM84lQVBduxxWRJVJXFZ4ekQ4enjNPlV8Dh1t3qwlX0afgAPLKDK4+EHUwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;logged output 1024x339&quot;
+        title=&quot;logged output 1024x339&quot;
+        src=&quot;/static/8b594a37b5c210c8015c500e45325f29/f058b/logged_output-1024x339.png&quot;
+        srcset=&quot;/static/8b594a37b5c210c8015c500e45325f29/c26ae/logged_output-1024x339.png 158w,
+/static/8b594a37b5c210c8015c500e45325f29/6bdcf/logged_output-1024x339.png 315w,
+/static/8b594a37b5c210c8015c500e45325f29/f058b/logged_output-1024x339.png 630w,
+/static/8b594a37b5c210c8015c500e45325f29/40601/logged_output-1024x339.png 945w,
+/static/8b594a37b5c210c8015c500e45325f29/2bef9/logged_output-1024x339.png 1024w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h3&gt;Creating the service connection&lt;/h3&gt;
+&lt;p&gt;Here it’s assumed that you already have a key vault an certificate configured.&lt;/p&gt;
+&lt;p&gt;First thing you need to do is create an application in your Azure AD.&lt;br&gt;
+Add a regular text secret to the application as well. You’ll need this for the service connection.&lt;/p&gt;
+&lt;p&gt;Now go to your key vault, and add the following access policy. Give Get and List access on certificates, and select your newly created application as the service principal, and save.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/79b81fe38f5ca649d9856b833b697c98/2bef9/access_config-1-1024x485.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 47.46835443037975%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAYAAAAywQxIAAAACXBIWXMAAAsTAAALEwEAmpwYAAABG0lEQVQoz3WRi27DIAxF8///uG7SJq1NQ0J422DuBE2rpO2QLBvbOlyb4XRecPpdMFqCCoLJFyhfoGMz2fzRlpDxdVlwMYTJZVwdQ/mM2TMGpojCCZAMYUIt/DDJDKDi3Vn1DD2NsFrBrXP30RkM0VkwMyIxLvMKGxkmEExgrIGQi3RArfVhUivO04zrOEIphRgjmAk5ZwwfowMRw6WMn8kgEYGLoEhFlhtgD2ynARNnEBFSShCRh/LhWzOyAMQM68KW3sas74HNZ+bDCu714Z5oY4fgd8VXyD6eV4PgfVfZFJZSOmOQraldjDF9D/9BjvFtjv1uu8J7UwMtywJr7csY7+J9zz4+ALXW8N6/vPoMLCL4VKl/Hp4U/gFV4cM7nLK7XAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;access config 1 1024x485&quot;
+        title=&quot;access config 1 1024x485&quot;
+        src=&quot;/static/79b81fe38f5ca649d9856b833b697c98/f058b/access_config-1-1024x485.png&quot;
+        srcset=&quot;/static/79b81fe38f5ca649d9856b833b697c98/c26ae/access_config-1-1024x485.png 158w,
+/static/79b81fe38f5ca649d9856b833b697c98/6bdcf/access_config-1-1024x485.png 315w,
+/static/79b81fe38f5ca649d9856b833b697c98/f058b/access_config-1-1024x485.png 630w,
+/static/79b81fe38f5ca649d9856b833b697c98/40601/access_config-1-1024x485.png 945w,
+/static/79b81fe38f5ca649d9856b833b697c98/2bef9/access_config-1-1024x485.png 1024w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Before you can set up the service connection you also need to assign the reader role to your application on your subscription. Go to your subscription, and navigate to the role assignment.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/4261ea365953164c16f5118033c6fd4a/2bef9/subscription_access-1-1024x450.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 43.67088607594937%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAYAAAAywQxIAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAw0lEQVQoz51RXW/DMAj0//+hfejWJlb8QQFzE3a9ZF37EqQTBsFx4HD5WnC53vB9W0AskGYQteFPIJScwFQhwoAZhtlphDUxEikePJR50uw8wn2NIFYQcU+01ro/ayGuC1gU65YRY0StFaptLH6Y/Bp/VMjMvbiQgHgnUtV97FP5ft//NocGb/Qgp9Q/ZpJt29bVUq0opcAHTxUi0jHi9meDkHPuj9nkSpzQGzye8NwneO0v4fE2TnaEPT/IXvLvMAl/ANabx7kZ+bqlAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;subscription access 1 1024x450&quot;
+        title=&quot;subscription access 1 1024x450&quot;
+        src=&quot;/static/4261ea365953164c16f5118033c6fd4a/f058b/subscription_access-1-1024x450.png&quot;
+        srcset=&quot;/static/4261ea365953164c16f5118033c6fd4a/c26ae/subscription_access-1-1024x450.png 158w,
+/static/4261ea365953164c16f5118033c6fd4a/6bdcf/subscription_access-1-1024x450.png 315w,
+/static/4261ea365953164c16f5118033c6fd4a/f058b/subscription_access-1-1024x450.png 630w,
+/static/4261ea365953164c16f5118033c6fd4a/40601/subscription_access-1-1024x450.png 945w,
+/static/4261ea365953164c16f5118033c6fd4a/2bef9/subscription_access-1-1024x450.png 1024w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Now you can configure your service connection in Azure DevOps with the variables from your subscription and service principal. In Azure DevOps navigate to the new service connection wizard. Select Azure Resource Manager as your connection type, and select the option to authenticate using a manual service principal.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 505px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/bcc6c0a5b82f2ccc6d39d8858ae501b7/c0cb9/service_con-1.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 182.91139240506325%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAlCAYAAABCr8kFAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAE10lEQVRIx31W53rbOBDUc1zOcokqVWiJvYmkusQiO/3Oce79n2LumyVBS46dH/MBBInF7s7sgq3ddovA9xAGPqIwaObn4JrnOoKg/o4I6zEIfSROjHydoeV7Lr5/+4qnf//Bj+/f8Ov5Jz5/epTnr18+y/zn0xP++/UscB0b45GG6WSMe30qI40axgy2Y6HFU7ebNYo8Exz2O5RFgYfTCdnxgNOplDnfPZxKWeP3WXaE73ti1LZMzGf3cB0HLce2ZGERhYgXURMOn01j3njCDQTXCMs05Hl2rwv4DW2JQYbN0xkyQ+T8y+dP4k2axPKeG9Tmc6iDOLftOmQu0Ct6SBLieCGG1qsldtuNrKnNbxmdnRtkkpdpgs16JaBRhsnEj7ShYDweyRpBo8Z89hsYgWWZlUF6cNjvQQmtlksk8QKLMMAqjbEIfaTJQg6jx9PJpDpkpDWH6tOpGKWdlue5Eh5Z3O+2OB722O/3WO8ybA8FNvsCq81eSGJa9OkEk/HoAvSORPHQlm1ZIlyVv0rcPizbhWHZsBwPhmFKuDSmSHgL69WqYnm1TEV/9FDBmKmkUzJ6k6s/GqSHzCF1SA8Juv7x7haDXheDfg2Z9zAc9H8D1xk29zHH4iFjP5Ul8uwoOSTrSbpEkGwQxGtE6Q6OF/5Ri/ReQmYOZ/WHqiLoMddNwrRgWTYMw5DQ3wpVGV0rUuiRyh3dVsaZvxfo7+buwiBDZu6UsCmhdyviD3jxsM4hvWMXOZUFttuNFP8Fs/Wc629BcqhYJkOUTiXeUEZ6Tl26riPVQ8+jwMdoOEC38xG9LtGRuTYcXLJMY2SZDJdFLnOWobDOnlgWOByOWO9yBPEKXpjCi1J4YYIoirBMYyFyRYNCyjKVsJXAFZRGq7BMYd2ybViWBdt2YNs2HIH1Iht2iIVfdW02BYqURc+RpUa2VaufjDXo03HFul5BvT+TjQE93CAvShTZUSS0TFNxnx5Wrd1GEscSBev+PQnVsjHR0V0Jx3edptGSBBriZo4kikl/r3tfyGa7SnHYbaU7s+1TQswdPyR75168JR31zVlzsOTG4nVAD9gjubHKoY77e12koRqCdobh6+ZAQzQS1Q1UdZ0kiYV9hp4miRzGw/n9zLAwM50aLmZzCvuslg9ZiW9fv8iFz1uvKPLmHi7yXHTIW5DPnx4fcMxLFOUjyodHFKdHIdScz+C5bpVDz/OQpolUhCLivSZw3nQF91XzlVuPlxQ9JBn0iCGTwdc32jkhqrVVo1kL37y8Rk3DEP2pHMlPke9VBJ3Nw8CDNuyj3+2g3+tg0OtIPfPmU3205YhoF1LDrJbj4YDsWNUwaznPM3mXZxm2+wy2G8C0PVj16NQOvIRMHW7WsoEaLMuiIuJUyrr6lWPXsV0fXhAJ/DCG50eiDnYl+WliyLTKDSw3Fjq19xqqXqvanTSYcazfNzk0TUPaz6/nJ8SLsLl7X5cW19Wf2FsH6pNxFTI7S6fbR384wkCb4O7uFrc317i7vWnAZ9V9+r1u1ZEU+Dsy0oQcrrdYOtrUgB3tYIVbDEZTtP/+gOv2VYOrD3/JHxmJGg4HkrcFKypeyG8xo9S0oZRni9rqdDroDzT0+kN0Ol3x6BI3uG630b66qubX7QY31+06ihsY8zn+B81HwfXZdJ6cAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;service con 1&quot;
+        title=&quot;service con 1&quot;
+        src=&quot;/static/bcc6c0a5b82f2ccc6d39d8858ae501b7/c0cb9/service_con-1.png&quot;
+        srcset=&quot;/static/bcc6c0a5b82f2ccc6d39d8858ae501b7/c26ae/service_con-1.png 158w,
+/static/bcc6c0a5b82f2ccc6d39d8858ae501b7/6bdcf/service_con-1.png 315w,
+/static/bcc6c0a5b82f2ccc6d39d8858ae501b7/c0cb9/service_con-1.png 505w&quot;
+        sizes=&quot;(max-width: 505px) 100vw, 505px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Now you should be good to throw it into your Azure PowerShell task, and give it a go!&lt;/p&gt;
+&lt;h2&gt;Second method: Connect an Azure DevOps library to a key vault&lt;/h2&gt;
+&lt;p&gt;This method is way simpler, but will expose your full certificate, including private keys. As above, create a service connection, but add the option to list and get secrets.&lt;/p&gt;
+&lt;p&gt;You can now simply create a library in Azure DevOps, and choose the option to link it to your certificates using the service connection. The certificate will be available as a Base64-encoded string under the certificate’s own variable name.&lt;/p&gt;
+&lt;p&gt;You can simply use Powershell to read the certificate string and parse it into an X509 certificate, and assign it to a runtime variable using the task.setvariable function mentioned in the first approach.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[How to resolve VST UI scaling issues in Reaper 6]]></title><description><![CDATA[A simple fix that’ll help Reaper scale VST UIs up on HDPI screens on Windows 10. I was unable to run BIAS FX 2, because my high HDPI screen…]]></description><link>https://hojte.net/how-to-resolve-vst-ui-scaling-issues-in-reaper-6/</link><guid isPermaLink="false">https://hojte.net/how-to-resolve-vst-ui-scaling-issues-in-reaper-6/</guid><pubDate>Sat, 23 Oct 2021 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;A simple fix that’ll help Reaper scale VST UIs up on HDPI screens on Windows 10.&lt;/p&gt;
+&lt;p&gt;I was unable to run BIAS FX 2, because my high HDPI screen would only render a quarter of the VST UI.&lt;/p&gt;
+&lt;p&gt;This simple requires changing a setting for the Reaper executable.&lt;/p&gt;
+&lt;p&gt;Right-click the reaper.exe file -&gt; Select &lt;strong&gt;Compatibility&lt;/strong&gt; -&gt; Select &lt;strong&gt;Change high DPI settings&lt;/strong&gt; -&gt; Enable &lt;strong&gt;Override high DPI scaling behavior&lt;/strong&gt; and select &lt;strong&gt;System&lt;/strong&gt; in the dropdown as shown below:&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/e654d6f3e567954330e661cfd2d04118/13e20/reaper_1_high_dpi.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 134.17721518987344%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAbCAYAAAB836/YAAAACXBIWXMAABnWAAAZ1gEY0crtAAADlElEQVRIx5VV2ZLiOBDk/z9pX3YmYne2G4huoDlsgy98YA4LG2OMDSY3smgYjp49FFFRlkCpUlZVqjGY9GDbNoIgQBCG8DwPrutCrdc4HA6oqkqsLMs7/2hFUSDLMjTWKoJSMeJYQSkFFceIlcJms8F+v8d2u8VuV8iG3W4nnmt5nsv8/Pt5nWsNpRKs12v0+320221E0RxpmgjgcrlEq9XER7+PdZIgTVI51JxM0Gq10Ol08Pr6itFoJBhxHKOx2aRyAq9tWRaybY5DVYGD62E4g+M4EgEHr8zDNE3DeDwWMNmXZUjTFA3+cTp14fseptMpZmEA13XgOg5834fveZhHEaJodp4HgXhyvlgscDwecRmkSAAtZ4qhbkAzJjBtB4ORDs0woY0nGGo6RvpYItyXpURYlnvZzDUCnk6nn4B5UeJdd/BH6x3fX97w2/c/8e2vNr79aOL3H03xQytAjV+PO8BdUcKY5TCjDHqwwdBLoPkJ3swVunYspocZfFVilpQ4HE9XkAvQHSCvEKkM/nwNf5HAW2ywSAqoHZAUQLIH0uKEOK+x2h5xrOsr2K1dAVmUq9UKY8OANRnDdSyEgY9jtcc2S5EmCkW+le+qLO6io9WfB1wBSWq6yTAxTSkd07KkHFx3Cl3XMRgMMJmY8u04rhTyI393gDwh8H20mk10Ol0Mh0MYhiF1Rk9wgp1rbig1d8vbEyA5/L/jXzn0vPP1qupw5aW+If8yf1z/kkMCUlXYt6x8JiiOVzLnb7cAwHOpfMkhW45NTnF4e3uTRJBDetM0nwr4sQafItzvC4mI0dEvV0vxVA+usfHr+jmyXwLSuJnSRAC1VlcwAlPn7jb/U4Tkb5tlZ8UJAoRU7iAUdfE8X5SFInCXUfq6PnthFveA1D3ySOm3HUd4ozzJ3LKlBqmBuNl89TzscHgGtG1LABaLJaIokgNIAf3hc4OAMOt5jpPvA7aNk2Hg9HnYFZDyTbButyuZpr2/d9ButdDt9eThysij4+CkaeKhFMDoHq98qcOi2CNJEkkGD6CcS4LUWpJSVhVOSSLXu4DQ6keBZeuF0RwjfQjHseX9YL9SKBgZ5wRmEq5A/H7omDvA+WIO3TiLAR8dGhPB5HCNXP6Xwds2mD2WRXl9L37a5fFmS7IeL08lK2A2m8mcCbw8WvP5HA0uygP/hRGEyer1uiIe3EgKmiJ1HZl/fHzg5eVFWpe3+RspLwd1V8x8+AAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;reaper 1 high dpi&quot;
+        title=&quot;reaper 1 high dpi&quot;
+        src=&quot;/static/e654d6f3e567954330e661cfd2d04118/f058b/reaper_1_high_dpi.png&quot;
+        srcset=&quot;/static/e654d6f3e567954330e661cfd2d04118/c26ae/reaper_1_high_dpi.png 158w,
+/static/e654d6f3e567954330e661cfd2d04118/6bdcf/reaper_1_high_dpi.png 315w,
+/static/e654d6f3e567954330e661cfd2d04118/f058b/reaper_1_high_dpi.png 630w,
+/static/e654d6f3e567954330e661cfd2d04118/13e20/reaper_1_high_dpi.png 741w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Select &lt;strong&gt;Change high DPI settings&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 563px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/4ef13e5e8b2ccf4462fb31ba13be8aba/7cb89/reaper_2_high_dpi.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 124.0506329113924%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAZCAYAAAAxFw7TAAAACXBIWXMAABnWAAAZ1gEY0crtAAAD+0lEQVQ4y3VViXKqWBD1//9maurNjHkRjRsiKIsKCCJgZDNuaFyynplug5VM3kvVqb4S7uGe7tN9S/P5HEkSI8syRhzHiOII9DzPc7w8P+Pp6ekLzuczx+fnZ8bLywuOxyMeHx9RSpMEURRhsVjgYbnEer1GkiRI0xSHwxG/+3t/f8fr6yve3t4YxYdKYRAgDEMEQQDf93k9nU4Zk8kEtm3D8zy4rgv/47njOIiThBVsNhvGdrtllAI/gGmaGI1GsCyLI2E8HnPUdR2WbWPiuhiPbX5X0zROCRGQIkJBXIqTFJZJGw0+hWlZOJ3PfHzKy7lYn044nU7X35Sv3W7H8XA48JoJKX/z+xkUuQup04EsyxDbLeiaBkPXMTAMdMQ2DMNAr6eg0+lAVVUMh0M+PZ222+3Ccd2LZCIMZnO0RAl/l29x12yjVm9BqNXR7igQJRl//PkXboUaZrMZSyUnUOEo3t/f8/MsW1xOmGUpjGALyVlCGi/QGT+g46whu0u07QfI7gqCkaLvLTkFJJskFlIpFSSXTvchec7VNQYDPj7lkda6YVxkaRrC2QyaZkDTVKiaysWjSlOkPVRt+gBLJr/1ewr+KZfRaDQYNzc3EAQBoihClrtoNJuQJAlSR0Kr1cJdvc65VBQF1WoVmq6j1+uxlUqLLEO3K6FWu0O73UKlIqAiCBAqFTRbLSav3N6iXq9DbLfRbDZRLpeZlIrRbDQgCBW02iI3BhfFdR2uIlV0MBhgZJrsOZLFnrRtqP0+LHt89enE8zAwdGhc8RE2hbGp9cj99JJtW5wXIiVjF7maTDz+iGWaLI3Ww+EAnje99vDV2DQQTHPE0qq1GrpSF41GHbVqlfNI+SFS6hA6KUXGaMT9TiRfOoUkJ3EEQ9f4BN7EZQLbslhKGM54CtFmwnW9WHB1ix6+EqZpgkGwguKtYQRrDIMV9vsd9vs9gzflOcfrerVCHkXYfBoOXySvNjskizXShzWW65yNSps5fhoA69UKayINQ+SiiM3hgM0nuUw4jy5yKcnmiIysQlU1Lgr17NhxLp2x3zPy4xG5pmHredjQQPg/IfUkzTvqgH6/D03toysrbBNZUfhZMbK0fh9+kuLw4we2vo/Nfv9dMiU4iWPIbO4ad8LPn7ds2KogMCkNX7JW4PtIsgz5bIbtcsk53H4M1y+EJK9SqUCWFa4wgXradRwmIifwmIsini4BIQyvk/qb5CDwOV/TqX+1R5Je7pXk4875jJgQx9/kXgnJHsUELnz1O9C7xZoqT27Yf+SSfrNtin/+6osFaIhSGmhI0OXF0oOAJxJ1FI07UsSE+S8M+vk2o0jvXdITcKRrlwiKW5Im+fK/afMvfCsXomVs2c8AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;reaper 2 high dpi&quot;
+        title=&quot;reaper 2 high dpi&quot;
+        src=&quot;/static/4ef13e5e8b2ccf4462fb31ba13be8aba/7cb89/reaper_2_high_dpi.png&quot;
+        srcset=&quot;/static/4ef13e5e8b2ccf4462fb31ba13be8aba/c26ae/reaper_2_high_dpi.png 158w,
+/static/4ef13e5e8b2ccf4462fb31ba13be8aba/6bdcf/reaper_2_high_dpi.png 315w,
+/static/4ef13e5e8b2ccf4462fb31ba13be8aba/7cb89/reaper_2_high_dpi.png 563w&quot;
+        sizes=&quot;(max-width: 563px) 100vw, 563px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Use &lt;strong&gt;System&lt;/strong&gt; for scaling&lt;/p&gt;
+&lt;p&gt;Now your VST UI should look completely normal:&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/0b57f6927fb24c335e585f0ab1f5633b/2bef9/reaper_3_high_dpi-1024x562.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 55.06329113924051%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsTAAALEwEAmpwYAAACWUlEQVQoz4WSS09TURCAS1GLUgyVXnpbKC0UKOXlRtQoQQQJSqwoibogoW9aJLqAoP9AgVLp47oisnFBInHhA41sSFwRNRrX6IIlhJRSkhJe+UxvtIFgZJIvc86ZzHdmMYqFnwssLS2R2kixubWVYWsPm5ubMlt/cpqNjQ3W19dJJpNyTrO2toZicXGReCLJrx+fGLznxOdxEPD24HI68Hi9uNxuPB4vfr8fp9Mpn3scDiYmJuTP4vE4iUQigyL9mI5nsQjHc1QIhQVoCzRo8vPRavIx6ASEglMIgoBB1FEkiiiVWbhcTrlvZWWF1dXVDIr0+OmQJAmTxUJD8zmami7Q0HAGa2U5p2uqqSy3YLNZqbHZqKutkWuPHg6wu7srC/dN+FcYDodRq9UYjUZE0YCoL6ZQX4TVUo7eUISxxIzJbMFUaiFXrcbn8+2b8IAwGo2iUuUg6rSYS7RUlhuothZTYzNRUSbK9zJzIUUGHUplNm63+/9CSYqhysnjSlMZs1OdfP3g5vusj8+vevj20cOX9z3Mveyks93C0WO5BAL+w4XZR05gbzMz0HuWwb4W7nubGepr5YH3EkP9l+l3nafrWilZStXhwlgsilYw0H2nhWnpInNTHbydvM7r5zd4M2ln9kUH01Ij7u5GBL2ZgL/338Lt7W258DQUIledR12tjVvtpThu13OzvYqOViv2Nit37VV0XTVTX1fBSY1wYG0ywuXlZXZ2dpifnycYDBKJRBkdixEMSYyMhhkeHWd4ZJzHw+M8GY0QDkcIhcZ4NzNDKpWSF3uv8DdDI1ZjBtxQqAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;reaper 3 high dpi 1024x562&quot;
+        title=&quot;reaper 3 high dpi 1024x562&quot;
+        src=&quot;/static/0b57f6927fb24c335e585f0ab1f5633b/f058b/reaper_3_high_dpi-1024x562.png&quot;
+        srcset=&quot;/static/0b57f6927fb24c335e585f0ab1f5633b/c26ae/reaper_3_high_dpi-1024x562.png 158w,
+/static/0b57f6927fb24c335e585f0ab1f5633b/6bdcf/reaper_3_high_dpi-1024x562.png 315w,
+/static/0b57f6927fb24c335e585f0ab1f5633b/f058b/reaper_3_high_dpi-1024x562.png 630w,
+/static/0b57f6927fb24c335e585f0ab1f5633b/40601/reaper_3_high_dpi-1024x562.png 945w,
+/static/0b57f6927fb24c335e585f0ab1f5633b/2bef9/reaper_3_high_dpi-1024x562.png 1024w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[When you should use decorator APIs over class attributes]]></title><description><![CDATA[The difference between decorator APIs and attributes You’ll run into having to make the decision between using decorator API or decorator…]]></description><link>https://hojte.net/when-you-should-use-decorator-apis-over-class-attributes/</link><guid isPermaLink="false">https://hojte.net/when-you-should-use-decorator-apis-over-class-attributes/</guid><pubDate>Sat, 23 Oct 2021 00:00:00 GMT</pubDate><content:encoded>&lt;h4&gt;The difference between decorator APIs and attributes&lt;/h4&gt;
+&lt;p&gt;You’ll run into having to make the decision between using decorator API or decorator attributes often, especially when you’re implementing persistence such as by using Entity Framework or the Mongo .NET driver, which both support decorator APIs or decorator attributes.&lt;/p&gt;
+&lt;p&gt;These decorators are used to describe a given class’ relation to the persistence layer, for example which column a given class property gets mapped to, which columns should have an index and so on.&lt;/p&gt;
+&lt;p&gt;Here’s an example of achieving the configuration of a primary key in Entity Framework with a decorator API(Entity Framework fluent API) and with class attributes.&lt;/p&gt;
+&lt;p&gt;The class might simply look as such:&lt;/p&gt;
+&lt;p&gt;public class Person {
+public int Id { get; set; }
+}&lt;/p&gt;
+&lt;p&gt;Here the primary key on the Person class gets implemented using the fluent API.&lt;/p&gt;
+&lt;p&gt;public class PersonDbContext: DbContext
+{
+public DbSet&lt;Person&gt; Persons { get; set; }&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&amp;lt;Person&gt;()
+            .HasKey(p =&gt; p.Id);
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;}&lt;/p&gt;
+&lt;p&gt;Here the primary key gets implemented using a simple class attribute on the Id property.&lt;/p&gt;
+&lt;p&gt;public class Person {
+[Key]
+public int Id { get; set; }
+}&lt;/p&gt;
+&lt;h4&gt;When to prefer the fluent API over attributes&lt;/h4&gt;
+&lt;p&gt;The class attribute looks significantly easier to implement, so why would you ever prefer to use the fluent API?&lt;/p&gt;
+&lt;p&gt;In many cases it’ll be more productive to simply use class attributes, but if you’re working according to concepts that require you to separate your concepts from your implementation such as when following domain-driven design or clean architecture, you’ll spare yourself a lot of pain by using the fluent API.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/a596b438f0d44b1a263307b7bd103197/2bef9/domain-driven-design-microservice-1024x567.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 55.06329113924051%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsTAAALEwEAmpwYAAABdElEQVQoz31SZ2+DMBTk//+5fuhQ1bAyCHsZm02uuleBSNrU0sM2tm68s3W73cDR9z2iKEKWZSiKAkmSbHvOaZoiDEPEcbwV//F8nmfBIJbFz1rTNMnhsixScnF3vt4hOavrOtnvh4U/xqpalA8TirIS1VVVYRgGNE2D4/EIz/MQBAGu1yvquv4B1FpDKQVjjFwk6wqUVxpKd/KPRVVU1LatELAV+9bwjhUEIVz7C69v73BcD3GSIUwKJFl1p3Q/CEjysiwFiHsSsU1W13Y4RjFePj/gOg4cx8UliJCXCm03QpteHBCAlumIa1o9n88SDoGpeBxHWMa0uCQpDr4D1/Fg27YoPbiB2O2HEVqbDYitoTWu2TsqzPN8c2Mtkt5vW5RfVFrmZ5YJxKfDPjKsXcr3T2Nlm+cFeanRaA1jtKgjGIv2T6eTALJIIICPQI+gnJVqoOpangat0zKt+r4voLROAgnlv3f4LOUVlCAMg6GQjEl/A4zIUX0Z9fb5AAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;domain driven design microservice 1024x567&quot;
+        title=&quot;domain driven design microservice 1024x567&quot;
+        src=&quot;/static/a596b438f0d44b1a263307b7bd103197/f058b/domain-driven-design-microservice-1024x567.png&quot;
+        srcset=&quot;/static/a596b438f0d44b1a263307b7bd103197/c26ae/domain-driven-design-microservice-1024x567.png 158w,
+/static/a596b438f0d44b1a263307b7bd103197/6bdcf/domain-driven-design-microservice-1024x567.png 315w,
+/static/a596b438f0d44b1a263307b7bd103197/f058b/domain-driven-design-microservice-1024x567.png 630w,
+/static/a596b438f0d44b1a263307b7bd103197/40601/domain-driven-design-microservice-1024x567.png 945w,
+/static/a596b438f0d44b1a263307b7bd103197/2bef9/domain-driven-design-microservice-1024x567.png 1024w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Taken from &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/ddd-oriented-microservice&quot;&gt;https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/ddd-oriented-microservice&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The idea is that the Person class represents your domain, but you are breaking the principle of separating domain from infrastructure, when you add a direct dependency on Entity Framework by placing Entity Framework attributes directly inside your domain class. In this case, Entity Framework technically belongs outside your domain layer as it’s simply a way of implementing the persistency necessary to support a repository/unit of work.&lt;/p&gt;
+&lt;p&gt;You can still achieve the separation of domain and infrastructure by duplicating the Person class, one in the domain layer with the same properties as in the infrastructure layer, where the infrastructure layer Person class simply remains decorated.&lt;/p&gt;
+&lt;p&gt;However, you can entirely skip the need to duplicate the class, by simply using the fluent API to decorate your domain class. Nobody says you have to implement a DTO infrastructure class for every domain entity; all you need to do is make your that your domain is separated from and unaware of your infrastructure layer.&lt;/p&gt;
+&lt;h4&gt;Advantage of decorator attributes&lt;/h4&gt;
+&lt;p&gt;With all this said, please be ware that it might just be your application doesn’t need such strict separation of domain and persistence. An advantage of decorator attributes might just be that they keep things simpler and more straightforward. You immediately know that a class with these attributes get managed by Entity Framework, and you get a full idea of the table structure, its indices etc.&lt;/p&gt;
+&lt;p&gt;On top of that, it’s simply significantly faster to add attributes than having to set up and configure the fluent API.&lt;br&gt;
+Finally, it’s really not that difficult to migrate from using attributes to using the fluent API should the need arise.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Preparing Identity Server 4 in .NET Core 3.1 for load balancing with Azure Key Vault]]></title><description><![CDATA[When load balancing your IS4 solution, it’s important to ensure that all your servers have access to the same signing credentials and key…]]></description><link>https://hojte.net/load-balancing-identity-server-4-on-iis7-with-net-core-3-1/</link><guid isPermaLink="false">https://hojte.net/load-balancing-identity-server-4-on-iis7-with-net-core-3-1/</guid><pubDate>Mon, 19 Oct 2020 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;When load balancing your IS4 solution, it’s important to ensure that all your servers have access to the same signing credentials and key storage for data protection.&lt;/p&gt;
+&lt;p&gt;For this post, we’ll work with x509 certificates in .NET Core 3.1.&lt;/p&gt;
+&lt;h2&gt;The problem&lt;/h2&gt;
+&lt;p&gt;IS4 performs both token encryption as well as encryption of cookies etc.&lt;br&gt;
+For this reason you’re gonna run into issues, if your nodes don’t have access to the exact same credentials.&lt;/p&gt;
+&lt;p&gt;If two nodes have different credentials, they won’t be able to understand nor validate tokens or cookies signed by the other.&lt;/p&gt;
+&lt;h2&gt;Signing credentials&lt;/h2&gt;
+&lt;p&gt;In IS4 terms, the signing credentials are the credentials used to sign JWTs.&lt;br&gt;
+It’s important that every instance of your IS4 has access to the same signing certificate.&lt;/p&gt;
+&lt;p&gt;You can do this in several ways.&lt;/p&gt;
+&lt;h4&gt;Azure Key Vault&lt;/h4&gt;
+&lt;p&gt;If you have access to Azure Key Vault, this is probably your easiest option. You’ll need to set up a service principal.&lt;/p&gt;
+&lt;p&gt;Install the Microsoft.Extensions.Configuration.AzureKeyVault package in your project to get the AddAzureKeyVault extension method below.&lt;/p&gt;
+&lt;p&gt;By running the extension method, all values in your key vault gets loaded in as key value pairs, which you can grab just like any other config value.&lt;/p&gt;
+&lt;p&gt;Host.CreateDefaultBuilder(args)
+.ConfigureAppConfiguration((context, config) =&gt; {
+config.AddAzureKeyVault(“Your endpoint”, “Your client Id”, “Your client secret”);
+}&lt;/p&gt;
+&lt;p&gt;However, your certificates are put in as values as Base64 encoded strings, so you need to do a little work to convert them to an X509Certificate, which can do in this way:&lt;/p&gt;
+&lt;p&gt;var base64EncodedCert = configuration.GetValue&lt;string&gt;(“Your certificate’s name in the key vault”);
+var certificateBytes = Convert.FromBase64String(base64EncodedCert);
+var x509Cert = new X509Certificate2(certificateBytes, string.Empty, X509KeyStorageFlags.EphemeralKeySet);&lt;/p&gt;
+&lt;p&gt;The first parameter in the array is of course the certificates information.&lt;/p&gt;
+&lt;p&gt;The empty string is the password, since the KeyVault strips away any password protection on your certificates.&lt;/p&gt;
+&lt;p&gt;Lastly the storage flag, I’ve set to EphemeralKeySet, which means it only gets loaded in Memory. By default, any X509Certificate2 will be attempted installed in the MMC, which can give issues, if you haven’t set user profile loading as enabled. Else you can set it to MachineKeySet, but I actually only need the certificate in-memory. As long as the application gets the certificate this way on every startup, it works.&lt;/p&gt;
+&lt;p&gt;Now that you’ve pulled out the certificate, all you need to do is load it into the AddSigningCredentials method that comes with the standard IS4 configuration.&lt;/p&gt;
+&lt;h4&gt;Using the MMC&lt;/h4&gt;
+&lt;p&gt;You can install certificates in the Personal directive, but I dislike this option, because it’s tricky to scale. If you need to set a new instance of IS4 up, you’ll need to install the certificate on that server as well, and enable access to make sure the app can reach the certificate.&lt;/p&gt;
+&lt;h2&gt;Data protection&lt;/h2&gt;
+&lt;p&gt;In .NET Core, the machine key has been replaced with the data protection API. The Data Protection API is what IS4 uses to sign cookies, whereas the signing credentials get used for signing tokens. Therefore it is equally important for your app to work that all nodes share the same keys.&lt;/p&gt;
+&lt;p&gt;By default the data protection API will use an in-memory key set, which is not good.&lt;/p&gt;
+&lt;p&gt;Now that you’ve loaded your certificates correctly, you can further increase the protection by encrypting the keys, once they get stored in the database of your choice.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/implementation/key-storage-providers&quot;&gt;https://docs.microsoft.com/en-us/aspnet/core/security/data-protection/implementation/key-storage-providers&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Adding the data protection storage&lt;/h3&gt;
+&lt;p&gt;I would definitely recommend Redis for this. SQL Server also works well, but you need to set up a database table for this purpose, which is far more work than what you need to do with Redis. Since Azure also provides access to Redis storage, you can set up Redis, install the Redis extension Nuget package, and add data protection for full scalability as seen below.&lt;/p&gt;
+&lt;p&gt;public void ConfigureServices(IServiceCollection services)
+{
+var redis = ConnectionMultiplexer.Connect(”&lt;URI&gt;”);
+services.AddDataProtection()
+.PersistKeysToStackExchangeRedis(redis, “DataProtection-Keys”);
+.ProtectKeysWithCertificate(YourX509CertHere) // Not mandatory but good practice
+}&lt;/p&gt;
+&lt;p&gt;Now your standard IS4 is ready to run in a load balanced setup.&lt;/p&gt;
+&lt;h2&gt;IIS configuration and access to certificate storage&lt;/h2&gt;
+&lt;p&gt;One issue I ran into was access issues to the MMC, and the IS4 events might pump out an error like the one below.&lt;/p&gt;
+&lt;p&gt;In this case you’re most likely having issues with either reading from the MMC or installing a certificate in it, so you can run into this issue all ways.&lt;/p&gt;
+&lt;p&gt;The reason I recommended using an in-memory certificate(Ephemeral Key Set) is because IIS applications by default have a flag called “Load User Profile” set to false. In this case, your application won’t have access to the Personal MMC store, and you’ll wind up with this error.&lt;/p&gt;
+&lt;p&gt;Unhandled exception: “Keyset does not exist” ”;“Internal.Cryptography.CryptoThrowHelper+WindowsCryptographicException: Keyset does not exist
+at System.Security.Cryptography.CngKey.Open(String keyName, CngProvider provider, CngKeyOpenOptions openOptions)
+at Internal.Cryptography.Pal.CertificatePal.GetPrivateKey[T](Func`2 createCsp, Func`2 createCng)
+at …
+IdentityServer4.Hosting.IdentityServerMiddleware.Invoke(HttpContext context, IEndpointRouter router, IUserSession session, IEventService events)&lt;/p&gt;
+&lt;p&gt;Connection ID &quot;&quot;17365880169046365174&quot;&quot;, Request ID &quot;&quot;800253f9-0001-f100-b63f-84710c7967bb&quot;&quot;: An unhandled exception was thrown by the  application.”;
+“Internal.Cryptography.CryptoThrowHelper+WindowsCryptographicException: Keyset does not exist
+at System.Security.Cryptography.CngKey.Open(String keyName, CngProvider provider, CngKeyOpenOptions openOptions)
+at Internal.Cryptography.Pal.CertificatePal.GetPrivateKey[T](Func`2 createCsp, Func`2 createCng)
+…   Microsoft.AspNetCore.Server.IIS.Core.IISHttpContextOfT`1.ProcessRequestAsync()&lt;/p&gt;</content:encoded></item></channel></rss>
