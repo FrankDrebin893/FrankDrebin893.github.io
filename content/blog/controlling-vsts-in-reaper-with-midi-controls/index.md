@@ -1,8 +1,9 @@
 ---
 title: "Controlling DAWs and VSTs in Reaper using MIDI controllers"
+date: "2024-03-11"
 categories: 
   - "music"
-coverImage: "akv_logo.png"
+coverImage: "images/reaper_logo.jpg"
 ---
 
 # Intro
