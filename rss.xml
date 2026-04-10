@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Rasmus Valbro Højte's personal site Feed]]></title><description><![CDATA[Rasmus Valbro Højte's personal blog]]></description><link>https://hojte.net</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 01 Aug 2024 20:49:35 GMT</lastBuildDate><item><title><![CDATA[Upgrading Azure Functions with EventHub ingest: In-process to isolated worker model]]></title><description><![CDATA[Intro Recently, I’ve had to upgrade several Azure Functions from in-process to isolated models in order to prepare for support ending for…]]></description><link>https://hojte.net/upgrading-azure-function-eventhub-output-bindings/</link><guid isPermaLink="false">https://hojte.net/upgrading-azure-function-eventhub-output-bindings/</guid><pubDate>Thu, 01 Aug 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Intro&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Rasmus Valbro Højte's personal site Feed]]></title><description><![CDATA[Rasmus Valbro Højte's personal blog]]></description><link>https://hojte.net</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 10 Apr 2026 19:26:17 GMT</lastBuildDate><item><title><![CDATA[Upgrading Azure Functions with EventHub ingest: In-process to isolated worker model]]></title><description><![CDATA[Intro Recently, I’ve had to upgrade several Azure Functions from in-process to isolated models in order to prepare for support ending for…]]></description><link>https://hojte.net/upgrading-azure-function-eventhub-output-bindings/</link><guid isPermaLink="false">https://hojte.net/upgrading-azure-function-eventhub-output-bindings/</guid><pubDate>Thu, 01 Aug 2024 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;Intro&lt;/h1&gt;
 &lt;p&gt;Recently, I’ve had to upgrade several Azure Functions from in-process to isolated models in order to prepare for &lt;a href=&quot;https://learn.microsoft.com/en-us/azure/azure-functions/migrate-dotnet-to-isolated-model?tabs=net8&quot;&gt;support ending for the in-process model&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;I specifically ran into problems with serialization of EventData, which should be supported by the &lt;a href=&quot;https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-event-hubs?tabs=isolated-process%2Cextensionv5&amp;#x26;pivots=programming-language-csharp#binding-types&quot;&gt;recommended output bindings as seen here&lt;/a&gt;.&lt;/p&gt;
 &lt;h2&gt;EventHub Output Bindings&lt;/h2&gt;
@@ -217,7 +217,72 @@ Add a regular text secret to the application as well. You’ll need this for the
 &lt;h2&gt;Second method: Connect an Azure DevOps library to a key vault&lt;/h2&gt;
 &lt;p&gt;This method is way simpler, but will expose your full certificate, including private keys. As above, create a service connection, but add the option to list and get secrets.&lt;/p&gt;
 &lt;p&gt;You can now simply create a library in Azure DevOps, and choose the option to link it to your certificates using the service connection. The certificate will be available as a Base64-encoded string under the certificate’s own variable name.&lt;/p&gt;
-&lt;p&gt;You can simply use Powershell to read the certificate string and parse it into an X509 certificate, and assign it to a runtime variable using the task.setvariable function mentioned in the first approach.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[How to resolve VST UI scaling issues in Reaper 6]]></title><description><![CDATA[A simple fix that’ll help Reaper scale VST UIs up on HDPI screens on Windows 10. I was unable to run BIAS FX 2, because my high HDPI screen…]]></description><link>https://hojte.net/how-to-resolve-vst-ui-scaling-issues-in-reaper-6/</link><guid isPermaLink="false">https://hojte.net/how-to-resolve-vst-ui-scaling-issues-in-reaper-6/</guid><pubDate>Sat, 23 Oct 2021 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;A simple fix that’ll help Reaper scale VST UIs up on HDPI screens on Windows 10.&lt;/p&gt;
+&lt;p&gt;You can simply use Powershell to read the certificate string and parse it into an X509 certificate, and assign it to a runtime variable using the task.setvariable function mentioned in the first approach.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[When you should use decorator APIs over class attributes]]></title><description><![CDATA[The difference between decorator APIs and attributes You’ll run into having to make the decision between using decorator API or decorator…]]></description><link>https://hojte.net/when-you-should-use-decorator-apis-over-class-attributes/</link><guid isPermaLink="false">https://hojte.net/when-you-should-use-decorator-apis-over-class-attributes/</guid><pubDate>Sat, 23 Oct 2021 00:00:00 GMT</pubDate><content:encoded>&lt;h4&gt;The difference between decorator APIs and attributes&lt;/h4&gt;
+&lt;p&gt;You’ll run into having to make the decision between using decorator API or decorator attributes often, especially when you’re implementing persistence such as by using Entity Framework or the Mongo .NET driver, which both support decorator APIs or decorator attributes.&lt;/p&gt;
+&lt;p&gt;These decorators are used to describe a given class’ relation to the persistence layer, for example which column a given class property gets mapped to, which columns should have an index and so on.&lt;/p&gt;
+&lt;p&gt;Here’s an example of achieving the configuration of a primary key in Entity Framework with a decorator API(Entity Framework fluent API) and with class attributes.&lt;/p&gt;
+&lt;p&gt;The class might simply look as such:&lt;/p&gt;
+&lt;p&gt;public class Person {
+public int Id { get; set; }
+}&lt;/p&gt;
+&lt;p&gt;Here the primary key on the Person class gets implemented using the fluent API.&lt;/p&gt;
+&lt;p&gt;public class PersonDbContext: DbContext
+{
+public DbSet&lt;Person&gt; Persons { get; set; }&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity&amp;lt;Person&gt;()
+            .HasKey(p =&gt; p.Id);
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;}&lt;/p&gt;
+&lt;p&gt;Here the primary key gets implemented using a simple class attribute on the Id property.&lt;/p&gt;
+&lt;p&gt;public class Person {
+[Key]
+public int Id { get; set; }
+}&lt;/p&gt;
+&lt;h4&gt;When to prefer the fluent API over attributes&lt;/h4&gt;
+&lt;p&gt;The class attribute looks significantly easier to implement, so why would you ever prefer to use the fluent API?&lt;/p&gt;
+&lt;p&gt;In many cases it’ll be more productive to simply use class attributes, but if you’re working according to concepts that require you to separate your concepts from your implementation such as when following domain-driven design or clean architecture, you’ll spare yourself a lot of pain by using the fluent API.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/a596b438f0d44b1a263307b7bd103197/2bef9/domain-driven-design-microservice-1024x567.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 55.06329113924051%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsTAAALEwEAmpwYAAABdElEQVQoz31SZ2+DMBTk//+5fuhQ1bAyCHsZm02uuleBSNrU0sM2tm68s3W73cDR9z2iKEKWZSiKAkmSbHvOaZoiDEPEcbwV//F8nmfBIJbFz1rTNMnhsixScnF3vt4hOavrOtnvh4U/xqpalA8TirIS1VVVYRgGNE2D4/EIz/MQBAGu1yvquv4B1FpDKQVjjFwk6wqUVxpKd/KPRVVU1LatELAV+9bwjhUEIVz7C69v73BcD3GSIUwKJFl1p3Q/CEjysiwFiHsSsU1W13Y4RjFePj/gOg4cx8UliJCXCm03QpteHBCAlumIa1o9n88SDoGpeBxHWMa0uCQpDr4D1/Fg27YoPbiB2O2HEVqbDYitoTWu2TsqzPN8c2Mtkt5vW5RfVFrmZ5YJxKfDPjKsXcr3T2Nlm+cFeanRaA1jtKgjGIv2T6eTALJIIICPQI+gnJVqoOpangat0zKt+r4voLROAgnlv3f4LOUVlCAMg6GQjEl/A4zIUX0Z9fb5AAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;domain driven design microservice 1024x567&quot;
+        title=&quot;domain driven design microservice 1024x567&quot;
+        src=&quot;/static/a596b438f0d44b1a263307b7bd103197/f058b/domain-driven-design-microservice-1024x567.png&quot;
+        srcset=&quot;/static/a596b438f0d44b1a263307b7bd103197/c26ae/domain-driven-design-microservice-1024x567.png 158w,
+/static/a596b438f0d44b1a263307b7bd103197/6bdcf/domain-driven-design-microservice-1024x567.png 315w,
+/static/a596b438f0d44b1a263307b7bd103197/f058b/domain-driven-design-microservice-1024x567.png 630w,
+/static/a596b438f0d44b1a263307b7bd103197/40601/domain-driven-design-microservice-1024x567.png 945w,
+/static/a596b438f0d44b1a263307b7bd103197/2bef9/domain-driven-design-microservice-1024x567.png 1024w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Taken from &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/ddd-oriented-microservice&quot;&gt;https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/ddd-oriented-microservice&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The idea is that the Person class represents your domain, but you are breaking the principle of separating domain from infrastructure, when you add a direct dependency on Entity Framework by placing Entity Framework attributes directly inside your domain class. In this case, Entity Framework technically belongs outside your domain layer as it’s simply a way of implementing the persistency necessary to support a repository/unit of work.&lt;/p&gt;
+&lt;p&gt;You can still achieve the separation of domain and infrastructure by duplicating the Person class, one in the domain layer with the same properties as in the infrastructure layer, where the infrastructure layer Person class simply remains decorated.&lt;/p&gt;
+&lt;p&gt;However, you can entirely skip the need to duplicate the class, by simply using the fluent API to decorate your domain class. Nobody says you have to implement a DTO infrastructure class for every domain entity; all you need to do is make your that your domain is separated from and unaware of your infrastructure layer.&lt;/p&gt;
+&lt;h4&gt;Advantage of decorator attributes&lt;/h4&gt;
+&lt;p&gt;With all this said, please be ware that it might just be your application doesn’t need such strict separation of domain and persistence. An advantage of decorator attributes might just be that they keep things simpler and more straightforward. You immediately know that a class with these attributes get managed by Entity Framework, and you get a full idea of the table structure, its indices etc.&lt;/p&gt;
+&lt;p&gt;On top of that, it’s simply significantly faster to add attributes than having to set up and configure the fluent API.&lt;br&gt;
+Finally, it’s really not that difficult to migrate from using attributes to using the fluent API should the need arise.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[How to resolve VST UI scaling issues in Reaper 6]]></title><description><![CDATA[A simple fix that’ll help Reaper scale VST UIs up on HDPI screens on Windows 10. I was unable to run BIAS FX 2, because my high HDPI screen…]]></description><link>https://hojte.net/how-to-resolve-vst-ui-scaling-issues-in-reaper-6/</link><guid isPermaLink="false">https://hojte.net/how-to-resolve-vst-ui-scaling-issues-in-reaper-6/</guid><pubDate>Sat, 23 Oct 2021 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;A simple fix that’ll help Reaper scale VST UIs up on HDPI screens on Windows 10.&lt;/p&gt;
 &lt;p&gt;I was unable to run BIAS FX 2, because my high HDPI screen would only render a quarter of the VST UI.&lt;/p&gt;
 &lt;p&gt;This simple requires changing a setting for the Reaper executable.&lt;/p&gt;
 &lt;p&gt;Right-click the reaper.exe file -&gt; Select &lt;strong&gt;Compatibility&lt;/strong&gt; -&gt; Select &lt;strong&gt;Change high DPI settings&lt;/strong&gt; -&gt; Enable &lt;strong&gt;Override high DPI scaling behavior&lt;/strong&gt; and select &lt;strong&gt;System&lt;/strong&gt; in the dropdown as shown below:&lt;/p&gt;
@@ -316,72 +381,7 @@ Add a regular text secret to the application as well. You’ll need this for the
         decoding=&quot;async&quot;
       /&gt;
   &lt;/a&gt;
-    &lt;/span&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[When you should use decorator APIs over class attributes]]></title><description><![CDATA[The difference between decorator APIs and attributes You’ll run into having to make the decision between using decorator API or decorator…]]></description><link>https://hojte.net/when-you-should-use-decorator-apis-over-class-attributes/</link><guid isPermaLink="false">https://hojte.net/when-you-should-use-decorator-apis-over-class-attributes/</guid><pubDate>Sat, 23 Oct 2021 00:00:00 GMT</pubDate><content:encoded>&lt;h4&gt;The difference between decorator APIs and attributes&lt;/h4&gt;
-&lt;p&gt;You’ll run into having to make the decision between using decorator API or decorator attributes often, especially when you’re implementing persistence such as by using Entity Framework or the Mongo .NET driver, which both support decorator APIs or decorator attributes.&lt;/p&gt;
-&lt;p&gt;These decorators are used to describe a given class’ relation to the persistence layer, for example which column a given class property gets mapped to, which columns should have an index and so on.&lt;/p&gt;
-&lt;p&gt;Here’s an example of achieving the configuration of a primary key in Entity Framework with a decorator API(Entity Framework fluent API) and with class attributes.&lt;/p&gt;
-&lt;p&gt;The class might simply look as such:&lt;/p&gt;
-&lt;p&gt;public class Person {
-public int Id { get; set; }
-}&lt;/p&gt;
-&lt;p&gt;Here the primary key on the Person class gets implemented using the fluent API.&lt;/p&gt;
-&lt;p&gt;public class PersonDbContext: DbContext
-{
-public DbSet&lt;Person&gt; Persons { get; set; }&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;protected override void OnModelCreating(ModelBuilder modelBuilder)
-{
-    modelBuilder.Entity&amp;lt;Person&gt;()
-            .HasKey(p =&gt; p.Id);
-}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;}&lt;/p&gt;
-&lt;p&gt;Here the primary key gets implemented using a simple class attribute on the Id property.&lt;/p&gt;
-&lt;p&gt;public class Person {
-[Key]
-public int Id { get; set; }
-}&lt;/p&gt;
-&lt;h4&gt;When to prefer the fluent API over attributes&lt;/h4&gt;
-&lt;p&gt;The class attribute looks significantly easier to implement, so why would you ever prefer to use the fluent API?&lt;/p&gt;
-&lt;p&gt;In many cases it’ll be more productive to simply use class attributes, but if you’re working according to concepts that require you to separate your concepts from your implementation such as when following domain-driven design or clean architecture, you’ll spare yourself a lot of pain by using the fluent API.&lt;/p&gt;
-&lt;p&gt;&lt;span
-      class=&quot;gatsby-resp-image-wrapper&quot;
-      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
-    &gt;
-      &lt;a
-    class=&quot;gatsby-resp-image-link&quot;
-    href=&quot;/static/a596b438f0d44b1a263307b7bd103197/2bef9/domain-driven-design-microservice-1024x567.png&quot;
-    style=&quot;display: block&quot;
-    target=&quot;_blank&quot;
-    rel=&quot;noopener&quot;
-  &gt;
-    &lt;span
-    class=&quot;gatsby-resp-image-background-image&quot;
-    style=&quot;padding-bottom: 55.06329113924051%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsTAAALEwEAmpwYAAABdElEQVQoz31SZ2+DMBTk//+5fuhQ1bAyCHsZm02uuleBSNrU0sM2tm68s3W73cDR9z2iKEKWZSiKAkmSbHvOaZoiDEPEcbwV//F8nmfBIJbFz1rTNMnhsixScnF3vt4hOavrOtnvh4U/xqpalA8TirIS1VVVYRgGNE2D4/EIz/MQBAGu1yvquv4B1FpDKQVjjFwk6wqUVxpKd/KPRVVU1LatELAV+9bwjhUEIVz7C69v73BcD3GSIUwKJFl1p3Q/CEjysiwFiHsSsU1W13Y4RjFePj/gOg4cx8UliJCXCm03QpteHBCAlumIa1o9n88SDoGpeBxHWMa0uCQpDr4D1/Fg27YoPbiB2O2HEVqbDYitoTWu2TsqzPN8c2Mtkt5vW5RfVFrmZ5YJxKfDPjKsXcr3T2Nlm+cFeanRaA1jtKgjGIv2T6eTALJIIICPQI+gnJVqoOpangat0zKt+r4voLROAgnlv3f4LOUVlCAMg6GQjEl/A4zIUX0Z9fb5AAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
-  &gt;&lt;/span&gt;
-  &lt;img
-        class=&quot;gatsby-resp-image-image&quot;
-        alt=&quot;domain driven design microservice 1024x567&quot;
-        title=&quot;domain driven design microservice 1024x567&quot;
-        src=&quot;/static/a596b438f0d44b1a263307b7bd103197/f058b/domain-driven-design-microservice-1024x567.png&quot;
-        srcset=&quot;/static/a596b438f0d44b1a263307b7bd103197/c26ae/domain-driven-design-microservice-1024x567.png 158w,
-/static/a596b438f0d44b1a263307b7bd103197/6bdcf/domain-driven-design-microservice-1024x567.png 315w,
-/static/a596b438f0d44b1a263307b7bd103197/f058b/domain-driven-design-microservice-1024x567.png 630w,
-/static/a596b438f0d44b1a263307b7bd103197/40601/domain-driven-design-microservice-1024x567.png 945w,
-/static/a596b438f0d44b1a263307b7bd103197/2bef9/domain-driven-design-microservice-1024x567.png 1024w&quot;
-        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
-        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
-        loading=&quot;lazy&quot;
-        decoding=&quot;async&quot;
-      /&gt;
-  &lt;/a&gt;
-    &lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;Taken from &lt;a href=&quot;https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/ddd-oriented-microservice&quot;&gt;https://docs.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/ddd-oriented-microservice&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;The idea is that the Person class represents your domain, but you are breaking the principle of separating domain from infrastructure, when you add a direct dependency on Entity Framework by placing Entity Framework attributes directly inside your domain class. In this case, Entity Framework technically belongs outside your domain layer as it’s simply a way of implementing the persistency necessary to support a repository/unit of work.&lt;/p&gt;
-&lt;p&gt;You can still achieve the separation of domain and infrastructure by duplicating the Person class, one in the domain layer with the same properties as in the infrastructure layer, where the infrastructure layer Person class simply remains decorated.&lt;/p&gt;
-&lt;p&gt;However, you can entirely skip the need to duplicate the class, by simply using the fluent API to decorate your domain class. Nobody says you have to implement a DTO infrastructure class for every domain entity; all you need to do is make your that your domain is separated from and unaware of your infrastructure layer.&lt;/p&gt;
-&lt;h4&gt;Advantage of decorator attributes&lt;/h4&gt;
-&lt;p&gt;With all this said, please be ware that it might just be your application doesn’t need such strict separation of domain and persistence. An advantage of decorator attributes might just be that they keep things simpler and more straightforward. You immediately know that a class with these attributes get managed by Entity Framework, and you get a full idea of the table structure, its indices etc.&lt;/p&gt;
-&lt;p&gt;On top of that, it’s simply significantly faster to add attributes than having to set up and configure the fluent API.&lt;br&gt;
-Finally, it’s really not that difficult to migrate from using attributes to using the fluent API should the need arise.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Preparing Identity Server 4 in .NET Core 3.1 for load balancing with Azure Key Vault]]></title><description><![CDATA[When load balancing your IS4 solution, it’s important to ensure that all your servers have access to the same signing credentials and key…]]></description><link>https://hojte.net/load-balancing-identity-server-4-on-iis7-with-net-core-3-1/</link><guid isPermaLink="false">https://hojte.net/load-balancing-identity-server-4-on-iis7-with-net-core-3-1/</guid><pubDate>Mon, 19 Oct 2020 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;When load balancing your IS4 solution, it’s important to ensure that all your servers have access to the same signing credentials and key storage for data protection.&lt;/p&gt;
+    &lt;/span&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Preparing Identity Server 4 in .NET Core 3.1 for load balancing with Azure Key Vault]]></title><description><![CDATA[When load balancing your IS4 solution, it’s important to ensure that all your servers have access to the same signing credentials and key…]]></description><link>https://hojte.net/load-balancing-identity-server-4-on-iis7-with-net-core-3-1/</link><guid isPermaLink="false">https://hojte.net/load-balancing-identity-server-4-on-iis7-with-net-core-3-1/</guid><pubDate>Mon, 19 Oct 2020 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;When load balancing your IS4 solution, it’s important to ensure that all your servers have access to the same signing credentials and key storage for data protection.&lt;/p&gt;
 &lt;p&gt;For this post, we’ll work with x509 certificates in .NET Core 3.1.&lt;/p&gt;
 &lt;h2&gt;The problem&lt;/h2&gt;
 &lt;p&gt;IS4 performs both token encryption as well as encryption of cookies etc.&lt;br&gt;
