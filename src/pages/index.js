@@ -1,94 +1,68 @@
 import * as React from "react"
-import { Link, graphql } from "gatsby"
-
-import Bio from "../components/bio"
+import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
-const BlogIndex = ({ data, location }) => {
-  const siteTitle = data.site.siteMetadata?.title || `Title`
-  const posts = data.allMarkdownRemark.nodes
-
-  if (posts.length === 0) {
-    return (
-      <Layout location={location} title={siteTitle}>
-        <Bio />
-        <p>
-          No blog posts found. Add markdown posts to "content/blog" (or the
-          directory you specified for the "gatsby-source-filesystem" plugin in
-          gatsby-config.js).
-        </p>
-      </Layout>
-    )
-  }
-
+const IndexPage = ({ location }) => {
   return (
-    <Layout location={location} title={siteTitle}>
-      <Bio />
-      <ol style={{ listStyle: `none` }}>
-        {posts.map(post => {
-          const title = post.frontmatter.title || post.fields.slug
-
-          return (
-            <li key={post.fields.slug}>
-              <article
-                className="post-list-item"
-                itemScope
-                itemType="http://schema.org/Article"
-              >
-                <header>
-                  <h2>
-                    <Link to={post.fields.slug} itemProp="url">
-                      <span itemProp="headline">{title}</span>
-                    </Link>
-                  </h2>
-                  <small>{post.frontmatter.date}</small>
-                </header>
-                <section>
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: post.frontmatter.description || post.excerpt,
-                    }}
-                    itemProp="description"
-                  />
-                </section>
-              </article>
+    <Layout location={location} title="HOJTE.NET">
+      <div className="sc1-panel">
+        <p className="sc1-panel-title">HOJTE.NET</p>
+        <p className="sc1-panel-subtitle">RASMUS HØJTE // DEVLOG</p>
+        <hr className="sc1-divider" />
+        <nav>
+          <ul className="sc1-menu-list">
+            <li>
+              <Link className="sc1-menu-item" to="/devlog/">DEVLOG</Link>
             </li>
-          )
-        })}
-      </ol>
+            <li>
+              <a
+                className="sc1-menu-item"
+                href="https://www.linkedin.com/in/rasmus-h%C3%B8jte-4a2326110/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                LINKEDIN
+              </a>
+            </li>
+            <li>
+              <a
+                className="sc1-menu-item"
+                href="https://github.com/FrankDrebin893"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GITHUB
+              </a>
+            </li>
+            <li>
+              <a
+                className="sc1-menu-item"
+                href="https://soundcloud.com/rasmus-valbro-h-jte"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                SOUNDCLOUD
+              </a>
+            </li>
+            <li>
+              <a
+                className="sc1-menu-item"
+                href="https://www.youtube.com/@Cruize91/videos"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                YOUTUBE
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <p className="sc1-panel-footer">© RASMUS HØJTE {new Date().getFullYear()}</p>
+      </div>
     </Layout>
   )
 }
 
-export default BlogIndex
+export default IndexPage
 
-/**
- * Head export to define metadata for the page
- *
- * See: https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-head/
- */
-export const Head = () => <Seo title="Home" />
-
-export const pageQuery = graphql`
-  query {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-    allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
-      nodes {
-        excerpt
-        fields {
-          slug
-        }
-        frontmatter {
-          date(formatString: "MMMM DD, YYYY")
-          title
-          description
-        }
-      }
-    }
-  }
-`
+export const Head = () => <Seo title="HOJTE.NET" />
