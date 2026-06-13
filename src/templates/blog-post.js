@@ -55,12 +55,39 @@ const BlogPostTemplate = ({
   )
 }
 
-export const Head = ({ data: { markdownRemark: post } }) => {
+export const Head = ({ data: { markdownRemark: post, site } }) => {
+  const siteUrl = site.siteMetadata?.siteUrl
+  const authorName = site.siteMetadata?.author?.name
+  const postUrl = `${siteUrl}${post.fields.slug}`
+  const description = post.frontmatter.description || post.excerpt
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.frontmatter.title,
+    description,
+    datePublished: post.frontmatter.dateIso,
+    author: {
+      "@type": "Person",
+      name: authorName,
+      url: siteUrl,
+    },
+    publisher: {
+      "@type": "Person",
+      name: authorName,
+    },
+    url: postUrl,
+  }
+
   return (
     <Seo
       title={post.frontmatter.title}
-      description={post.frontmatter.description || post.excerpt}
-    />
+      description={description}
+      type="article"
+      url={postUrl}
+    >
+      <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+    </Seo>
   )
 }
 
@@ -75,15 +102,23 @@ export const pageQuery = graphql`
     site {
       siteMetadata {
         title
+        siteUrl
+        author {
+          name
+        }
       }
     }
     markdownRemark(id: { eq: $id }) {
       id
       excerpt(pruneLength: 160)
       html
+      fields {
+        slug
+      }
       frontmatter {
         title
         date(formatString: "YYYY.MM.DD")
+        dateIso: date(formatString: "YYYY-MM-DD")
         description
       }
     }

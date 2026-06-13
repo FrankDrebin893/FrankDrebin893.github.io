@@ -3,7 +3,7 @@ module.exports = {
     title: `Rasmus Valbro Højte`,
     author: {
       name: `Rasmus Valbro Højte`,
-      summary: ``,
+      summary: `who writes about software, music, and game development`,
     },
     description: `Rasmus Valbro Højte's personal blog`,
     siteUrl: `https://hojte.net`,
@@ -12,6 +12,7 @@ module.exports = {
     },
   },
   plugins: [
+    `gatsby-plugin-sitemap`,
     {
       resolve: `gatsby-plugin-google-gtag`,
       options: {
@@ -124,7 +125,7 @@ module.exports = {
         // https://css-tricks.com/meta-theme-color-and-trickery/
         // theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `src/images/profile-pic.png`, // This path is relative to the root of the site.
+        icon: `src/images/site-icon.png`,
       },
     },
   ],
