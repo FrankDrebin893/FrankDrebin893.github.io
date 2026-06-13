@@ -8,7 +8,6 @@ const IndexPage = ({ location }) => {
     <Layout location={location} title="HOJTE.NET">
       <div className="sc1-panel">
         <p className="sc1-panel-title">HOJTE.NET</p>
-        <p className="sc1-panel-subtitle">RASMUS HØJTE // DEVLOG</p>
         <hr className="sc1-divider" />
         <nav>
           <ul className="sc1-menu-list">

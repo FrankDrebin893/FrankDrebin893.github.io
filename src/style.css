@@ -10,11 +10,11 @@
   --border:       #3a3820;
   --border-hi:    #6a6030;
   --border-lo:    #252310;
-  --text:         #9a8850;
-  --text-hi:      #c8a84b;
-  --text-bright:  #e0c060;
-  --text-body:    #c0aa74;
-  --text-dim:     #504830;
+  --text:         #c0a055;
+  --text-hi:      #d4b050;
+  --text-bright:  #e8c865;
+  --text-body:    #d4bc88;
+  --text-dim:     #706040;
   --accent:       #5c8a3c;
   --glow:         rgba(200, 168, 75, 0.45);
   --font:         'Share Tech Mono', 'Courier New', monospace;
@@ -525,6 +525,24 @@ hr {
   letter-spacing: 0.1em;
   white-space: nowrap;
   flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────
+   POST PAGE PANEL
+───────────────────────────────────── */
+.sc1-post-page {
+  background: #141410;
+  border: 1px solid var(--border);
+  padding: 2.5rem 2.5rem 2rem 2.5rem;
+  box-shadow:
+    0 0 60px rgba(0, 0, 0, 0.6),
+    inset 0 0 40px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 600px) {
+  .sc1-post-page {
+    padding: 1.5rem 1.25rem;
+  }
 }
 
 /* ─────────────────────────────────────
