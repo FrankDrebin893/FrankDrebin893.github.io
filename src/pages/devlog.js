@@ -9,11 +9,11 @@ const DevlogPage = ({ data, location }) => {
 
   return (
     <Layout location={location} title={siteTitle}>
-      <div className="mission-log">
-        <p className="mission-label">// MISSION ARCHIVE</p>
-        <h1 className="mission-log-title">MISSION LOG</h1>
+      <div className="sc1-panel sc1-panel--wide">
+        <p className="sc1-panel-title">DEVLOG</p>
+        <hr className="sc1-divider" />
         {posts.length === 0 ? (
-          <p>No missions on record.</p>
+          <p>No posts yet.</p>
         ) : (
           <ol className="mission-list">
             {posts.map(post => {

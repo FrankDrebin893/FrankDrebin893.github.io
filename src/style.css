@@ -10,11 +10,11 @@
   --border:       #3a3820;
   --border-hi:    #6a6030;
   --border-lo:    #252310;
-  --text:         #c0a055;
-  --text-hi:      #d4b050;
-  --text-bright:  #e8c865;
-  --text-body:    #d4bc88;
-  --text-dim:     #706040;
+  --text:         #deca9b;
+  --text-hi:      #edd9a1;
+  --text-bright:  #f6e8bc;
+  --text-body:    #ead5ac;
+  --text-dim:     #aa915a;
   --accent:       #5c8a3c;
   --glow:         rgba(200, 168, 75, 0.45);
   --font:         'Share Tech Mono', 'Courier New', monospace;
@@ -274,7 +274,7 @@ hr {
 
 .sc1-panel {
   position: relative;
-  background: linear-gradient(180deg, var(--panel-bg-top) 0%, var(--panel-bg) 100%);
+  background: var(--panel-bg);
   border: 1px solid var(--border-hi);
   box-shadow:
     0 0 60px rgba(200, 168, 75, 0.07),
@@ -283,6 +283,11 @@ hr {
   min-width: 300px;
   width: min(400px, 90vw);
   padding: 2.5rem 0 2rem 0;
+}
+
+.sc1-panel--wide {
+  width: min(600px, 90vw);
+  margin: 0 auto;
 }
 
 .sc1-panel::before,
@@ -406,6 +411,8 @@ hr {
 }
 
 .sc1-back-link {
+  display: inline-flex;
+  align-items: center;
   font-size: 0.65rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -413,6 +420,7 @@ hr {
   text-decoration: none;
   border: 1px solid var(--border);
   padding: 0.3rem 0.6rem;
+  line-height: 1;
   transition: color 0.08s, border-color 0.08s, text-shadow 0.08s;
   white-space: nowrap;
 }
@@ -449,26 +457,6 @@ hr {
 /* ─────────────────────────────────────
    MISSION LOG (DEVLOG LISTING)
 ───────────────────────────────────── */
-.mission-label {
-  font-size: 0.58rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 0.4rem;
-}
-
-.mission-log-title {
-  font-family: var(--font);
-  font-size: 1rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--text-hi);
-  font-weight: normal;
-  margin-bottom: 2rem;
-  text-shadow: 0 0 15px var(--glow);
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border);
-}
 
 .mission-list {
   list-style: none;
@@ -488,7 +476,7 @@ hr {
   display: flex;
   gap: 1rem;
   align-items: baseline;
-  padding: 0.9rem 0;
+  padding: 0.9rem 1.5rem 0.9rem 2rem;
   color: var(--text);
   text-decoration: none;
   font-size: 0.82rem;
@@ -548,13 +536,6 @@ hr {
 /* ─────────────────────────────────────
    MISSION BRIEFING (BLOG POST)
 ───────────────────────────────────── */
-.mission-briefing-label {
-  font-size: 0.58rem;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 0.4rem;
-}
 
 .mission-briefing h1 {
   font-family: var(--font);
@@ -742,6 +723,8 @@ pre[class*="language-"] {
 }
 
 .sc1-post-nav-list a {
+  display: inline-flex;
+  align-items: center;
   font-size: 0.65rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -749,7 +732,7 @@ pre[class*="language-"] {
   text-decoration: none;
   border: 1px solid var(--border);
   padding: 0.4rem 0.75rem;
-  display: inline-block;
+  line-height: 1;
   transition: color 0.08s, border-color 0.08s, text-shadow 0.08s;
 }
 
