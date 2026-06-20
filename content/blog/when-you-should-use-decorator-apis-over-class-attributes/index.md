@@ -20,12 +20,15 @@ Here's an example of achieving the configuration of a primary key in Entity Fram
 
 The class might simply look as such:
 
+```csharp
 public class Person {
-	public int Id { get; set; }
+    public int Id { get; set; }
 }
+```
 
 Here the primary key on the Person class gets implemented using the fluent API.
 
+```csharp
 public class PersonDbContext: DbContext 
 {
     public DbSet<Person> Persons { get; set; }
@@ -36,13 +39,16 @@ public class PersonDbContext: DbContext
                 .HasKey(p => p.Id);
     }
 }
+```
 
 Here the primary key gets implemented using a simple class attribute on the Id property.
 
+```csharp
 public class Person {
-	\[Key\]
-	public int Id { get; set; }
+    [Key]
+    public int Id { get; set; }
 }
+```
 
 #### When to prefer the fluent API over attributes
 

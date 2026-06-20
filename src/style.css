@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-
 /* ─────────────────────────────────────
    TERRAN COLOR PALETTE
 ───────────────────────────────────── */
@@ -455,7 +453,7 @@ hr {
 }
 
 /* ─────────────────────────────────────
-   MISSION LOG (DEVLOG LISTING)
+   DEVLOG LISTING
 ───────────────────────────────────── */
 
 .mission-list {
@@ -541,11 +539,10 @@ hr {
   font-family: var(--font);
   font-weight: normal;
   font-size: 1.3rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: 0.03em;
   color: var(--text-hi);
   margin-bottom: 0.3rem;
-  line-height: 1.3;
+  line-height: 1.4;
   text-shadow: 0 0 15px var(--glow);
 }
 
@@ -562,6 +559,7 @@ hr {
 
 /* ── Post body prose ── */
 .mission-briefing section {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
   line-height: 1.8;
   color: var(--text-body);
   font-size: 0.88rem;
@@ -575,7 +573,7 @@ hr {
   font-family: var(--font);
   font-weight: normal;
   font-size: 0.95rem;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-hi);
   margin: 2.5rem 0 1rem 0;
@@ -587,7 +585,7 @@ hr {
   font-family: var(--font);
   font-weight: normal;
   font-size: 0.88rem;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
   color: var(--text);
   margin: 2rem 0 0.75rem 0;
@@ -598,10 +596,10 @@ hr {
 .mission-briefing section h6 {
   font-family: var(--font);
   font-weight: normal;
-  font-size: 0.82rem;
-  letter-spacing: 0.1em;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--text-dim);
+  color: var(--text);
   margin: 1.5rem 0 0.5rem 0;
 }
 
@@ -694,10 +692,12 @@ pre[class*="language-"] {
 .gatsby-highlight {
   margin-bottom: 1.25rem;
   border: 1px solid var(--border);
+  overflow: hidden;
 }
 
 .gatsby-highlight pre {
   border-radius: 0;
+  overflow-x: auto;
 }
 
 /* ─────────────────────────────────────

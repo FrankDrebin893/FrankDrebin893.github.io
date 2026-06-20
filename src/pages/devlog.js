@@ -36,7 +36,7 @@ const DevlogPage = ({ data, location }) => {
 
 export default DevlogPage
 
-export const Head = () => <Seo title="Mission Log" />
+export const Head = () => <Seo title="Devlog" />
 
 export const pageQuery = graphql`
   query {

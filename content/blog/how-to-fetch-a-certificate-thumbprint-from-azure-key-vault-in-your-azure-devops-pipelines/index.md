@@ -29,11 +29,13 @@ Give the task a service connection with a certificate read access principal. See
 
 Add the following script, but replace the variable with your own key vault name and certificate name:
 
+```powershell
 $Thumbprint = (Get-AzKeyVaultCertificate -VaultName "ReplaceWithKeyVaultName" -Name "ReplaceWithCertificateName").Thumbprint
 
 Write-Host "The thumbprint is $Thumbprint"
 
-Write-Host "##vso\[task.setvariable variable=Tp\]$Thumbprint"
+Write-Host "##vso[task.setvariable variable=Tp]$Thumbprint"
+```
 
 This script will grab the certificate's public info, and set the Thumbprint variable with the certificate's thumbprint value.
 

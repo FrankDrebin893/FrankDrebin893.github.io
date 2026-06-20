@@ -29,18 +29,22 @@ If you have access to Azure Key Vault, this is probably your easiest option. You
 
 Install the Microsoft.Extensions.Configuration.AzureKeyVault package in your project to get the AddAzureKeyVault extension method below.
 
-By running the extension method, all values in your key vault gets loaded in as key value pairs, which you can grab just like any other config value.  
+By running the extension method, all values in your key vault gets loaded in as key value pairs, which you can grab just like any other config value.
 
+```csharp
 Host.CreateDefaultBuilder(args)
 .ConfigureAppConfiguration((context, config) => {
     config.AddAzureKeyVault("Your endpoint", "Your client Id", "Your client secret");
 }
+```
 
 However, your certificates are put in as values as Base64 encoded strings, so you need to do a little work to convert them to an X509Certificate, which can do in this way:
 
+```csharp
 var base64EncodedCert = configuration.GetValue<string>("Your certificate's name in the key vault");
 var certificateBytes = Convert.FromBase64String(base64EncodedCert);
 var x509Cert = new X509Certificate2(certificateBytes, string.Empty, X509KeyStorageFlags.EphemeralKeySet);
+```
 
 The first parameter in the array is of course the certificates information.
 
@@ -68,6 +72,7 @@ Now that you've loaded your certificates correctly, you can further increase the
 
 I would definitely recommend Redis for this. SQL Server also works well, but you need to set up a database table for this purpose, which is far more work than what you need to do with Redis. Since Azure also provides access to Redis storage, you can set up Redis, install the Redis extension Nuget package, and add data protection for full scalability as seen below.
 
+```csharp
 public void ConfigureServices(IServiceCollection services)
 {
     var redis = ConnectionMultiplexer.Connect("<URI>");
@@ -75,6 +80,7 @@ public void ConfigureServices(IServiceCollection services)
         .PersistKeysToStackExchangeRedis(redis, "DataProtection-Keys");
         .ProtectKeysWithCertificate(YourX509CertHere) // Not mandatory but good practice
 }
+```
 
 Now your standard IS4 is ready to run in a load balanced setup.
 
@@ -86,14 +92,13 @@ In this case you're most likely having issues with either reading from the MMC o
 
 The reason I recommended using an in-memory certificate(Ephemeral Key Set) is because IIS applications by default have a flag called "Load User Profile" set to false. In this case, your application won't have access to the Personal MMC store, and you'll wind up with this error.
 
-Unhandled exception: "Keyset does not exist" ";"Internal.Cryptography.CryptoThrowHelper+WindowsCryptographicException: Keyset does not exist
+```
+Unhandled exception: "Keyset does not exist"
+Internal.Cryptography.CryptoThrowHelper+WindowsCryptographicException: Keyset does not exist
    at System.Security.Cryptography.CngKey.Open(String keyName, CngProvider provider, CngKeyOpenOptions openOptions)
-   at Internal.Cryptography.Pal.CertificatePal.GetPrivateKey\[T\](Func\`2 createCsp, Func\`2 createCng)
+   at Internal.Cryptography.Pal.CertificatePal.GetPrivateKey[T](Func`2 createCsp, Func`2 createCng)
    at ...
 IdentityServer4.Hosting.IdentityServerMiddleware.Invoke(HttpContext context, IEndpointRouter router, IUserSession session, IEventService events)
-      
- Connection ID ""17365880169046365174"", Request ID ""800253f9-0001-f100-b63f-84710c7967bb"": An unhandled exception was thrown by the  application.";
-   "Internal.Cryptography.CryptoThrowHelper+WindowsCryptographicException: Keyset does not exist
-   at System.Security.Cryptography.CngKey.Open(String keyName, CngProvider provider, CngKeyOpenOptions openOptions)
-   at Internal.Cryptography.Pal.CertificatePal.GetPrivateKey\[T\](Func\`2 createCsp, Func\`2 createCng)
-    ......   Microsoft.AspNetCore.Server.IIS.Core.IISHttpContextOfT\`1.ProcessRequestAsync()
+   ...
+   Microsoft.AspNetCore.Server.IIS.Core.IISHttpContextOfT`1.ProcessRequestAsync()
+```
