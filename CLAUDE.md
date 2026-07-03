@@ -24,15 +24,15 @@ Gatsby 4 static site with Markdown content, deployed to GitHub Pages at hojte.ne
 **Data layer** — `gatsby-source-filesystem` reads `content/blog/` and `src/images/`. `gatsby-transformer-remark` converts Markdown to HTML. `gatsby-node.js` generates one page per post via the `blog-post.js` template, injecting `previousPostId`/`nextPostId` context for prev/next navigation.
 
 **Pages**
-- `src/pages/index.js` — root landing page (StarCraft 1 Terran main-menu panel with nav links)
-- `src/pages/devlog.js` — post list ("MISSION LOG"), queries all `MarkdownRemark` nodes sorted by date DESC
+- `src/pages/index.js` — root landing page (centered nav card linking to Blog + external profiles)
+- `src/pages/devlog.js` — post list page (displayed as "Blog", route stays `/devlog/`), queries all `MarkdownRemark` nodes sorted by date DESC
 - `src/templates/blog-post.js` — individual post view; includes JSON-LD `BlogPosting` schema in `<Head>`
 
 **Components**
-- `layout.js` — two-mode wrapper: root path renders a full-screen `sc1-viewport`, all other paths render `sc1-page` with a back link header and footer
-- `seo.js`, `bio.js` — standard SEO head component and author bio
+- `layout.js` — two-mode wrapper: root path renders a full-screen `site-home`, all other paths render `site-page` with a back-to-home header and footer
+- `seo.js` — standard SEO head component
 
-**Styling** — single `src/style.css` with a StarCraft 1 Terran theme. CSS custom properties for the color palette live in `:root` under `/* TERRAN COLOR PALETTE */`. All UI elements use `sc1-*` and `mission-*` BEM-style class names. No CSS framework; no CSS modules.
+**Styling** — single `src/style.css` with a modern dark theme. CSS custom properties live in `:root` (`--bg`, `--bg-elevated`, `--border`, `--text`, `--text-heading`, `--text-muted`, `--accent`, `--font-sans`, `--font-mono`). Body copy and headings use the system sans-serif font stack; monospace (system stack, no webfont) is reserved for code blocks and inline code. All UI elements use `site-*` and `post-*` BEM-style class names. No CSS framework; no CSS modules; single fixed theme (no light/dark toggle).
 
 ## Writing posts
 

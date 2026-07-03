@@ -9,20 +9,20 @@ const DevlogPage = ({ data, location }) => {
 
   return (
     <Layout location={location} title={siteTitle}>
-      <div className="sc1-panel sc1-panel--wide">
-        <p className="sc1-panel-title">DEVLOG</p>
-        <hr className="sc1-divider" />
+      <div className="site-card site-card--wide">
+        <p className="site-card-title">Blog</p>
+        <hr className="site-divider" />
         {posts.length === 0 ? (
           <p>No posts yet.</p>
         ) : (
-          <ol className="mission-list">
+          <ol className="post-list">
             {posts.map(post => {
               const title = post.frontmatter.title || post.fields.slug
               return (
-                <li key={post.fields.slug} className="mission-item">
+                <li key={post.fields.slug} className="post-list-item">
                   <Link to={post.fields.slug}>
-                    <span className="mission-item-title">{title}</span>
-                    <span className="mission-item-date">{post.frontmatter.date}</span>
+                    <span className="post-list-item-title">{title}</span>
+                    <span className="post-list-item-date">{post.frontmatter.date}</span>
                   </Link>
                 </li>
               )
@@ -36,7 +36,7 @@ const DevlogPage = ({ data, location }) => {
 
 export default DevlogPage
 
-export const Head = () => <Seo title="Devlog" />
+export const Head = () => <Seo title="Blog" />
 
 export const pageQuery = graphql`
   query {

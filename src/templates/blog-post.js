@@ -12,34 +12,34 @@ const BlogPostTemplate = ({
 
   return (
     <Layout location={location} title={siteTitle}>
-      <div className="sc1-post-page">
+      <div className="post-page">
         <article
-          className="mission-briefing"
+          className="post-article"
           itemScope
           itemType="http://schema.org/Article"
         >
           <header>
             <h1 itemProp="headline">{post.frontmatter.title}</h1>
-            <p className="mission-briefing-date">{post.frontmatter.date}</p>
+            <p className="post-article-date">{post.frontmatter.date}</p>
           </header>
           <section
             dangerouslySetInnerHTML={{ __html: post.html }}
             itemProp="articleBody"
           />
         </article>
-        <nav className="sc1-post-nav">
-          <ul className="sc1-post-nav-list">
+        <nav className="post-nav">
+          <ul className="post-nav-list">
             <li>
               {previous && (
                 <Link to={previous.fields.slug} rel="prev">
-                  {"<"} PREVIOUS POST
+                  ← Previous
                 </Link>
               )}
             </li>
             <li>
               {next && (
                 <Link to={next.fields.slug} rel="next">
-                  NEXT POST {">"}
+                  Next →
                 </Link>
               )}
             </li>

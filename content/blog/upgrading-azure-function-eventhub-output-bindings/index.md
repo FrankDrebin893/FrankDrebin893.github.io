@@ -29,5 +29,3 @@ It's not as neat and simple as adding an output binding attribute and returning 
 It also fits well with the flow of your code, if you're already using the IAsyncCollector, as you can simply replace calls made to the IAsyncCollector with this client. Underneath, I believe the both use the same EventHub client object to send the data.
 
 An interesting piece of data I noticed as a result of doing this upgrade, was that even if the receiving EventHub received just as many bytes and incoming messages as always, the number of requests to the EventHub fell by about 50%. I haven't made further calculations on whether it's a big improvement in terms of pricing, but I'd love to hear, if anybody else has seen the same. A guess would be that the IAsyncCollector has sent EventData in small batches.
-
-![](images/.png)![](images/.png)

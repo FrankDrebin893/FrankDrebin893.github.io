@@ -32,6 +32,3 @@ A bit more thorough than this introduction in video format with a conceptually s
 
 [ReaLearn](https://github.com/helgoboss/realearn#installation)  
 VST Plugin that makes mapping the MIDI input a lot easier.
-
-
-![](images/.png)![](images/.png)

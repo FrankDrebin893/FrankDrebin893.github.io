@@ -6,57 +6,57 @@ import Seo from "../components/seo"
 const IndexPage = ({ location }) => {
   return (
     <Layout location={location} title="HOJTE.NET">
-      <div className="sc1-panel">
-        <p className="sc1-panel-title">HOJTE.NET</p>
-        <hr className="sc1-divider" />
+      <div className="site-card">
+        <p className="site-card-title">HOJTE.NET</p>
+        <hr className="site-divider" />
         <nav>
-          <ul className="sc1-menu-list">
+          <ul className="site-nav-list">
             <li>
-              <Link className="sc1-menu-item" to="/devlog/">DEVLOG</Link>
+              <Link className="site-nav-link" to="/devlog/">Blog</Link>
             </li>
             <li>
               <a
-                className="sc1-menu-item"
+                className="site-nav-link"
                 href="https://www.linkedin.com/in/rasmus-h%C3%B8jte-4a2326110/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                LINKEDIN
+                LinkedIn
               </a>
             </li>
             <li>
               <a
-                className="sc1-menu-item"
+                className="site-nav-link"
                 href="https://github.com/FrankDrebin893"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                GITHUB
+                GitHub
               </a>
             </li>
             <li>
               <a
-                className="sc1-menu-item"
+                className="site-nav-link"
                 href="https://soundcloud.com/rasmus-valbro-h-jte"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                SOUNDCLOUD
+                SoundCloud
               </a>
             </li>
             <li>
               <a
-                className="sc1-menu-item"
+                className="site-nav-link"
                 href="https://www.youtube.com/@Cruize91/videos"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                YOUTUBE
+                YouTube
               </a>
             </li>
           </ul>
         </nav>
-        <p className="sc1-panel-footer">© RASMUS HØJTE {new Date().getFullYear()}</p>
+        <p className="site-card-footer">© RASMUS HØJTE {new Date().getFullYear()}</p>
       </div>
     </Layout>
   )

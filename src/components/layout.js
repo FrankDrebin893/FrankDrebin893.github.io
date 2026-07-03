@@ -7,20 +7,18 @@ const Layout = ({ location, title, children }) => {
 
   return (
     <>
-      <div className="sc1-stars sc1-stars-sm" aria-hidden="true" />
-      <div className="sc1-stars sc1-stars-lg" aria-hidden="true" />
       {isRootPath ? (
-        <div className="sc1-viewport">
+        <div className="site-home">
           {children}
         </div>
       ) : (
-        <div className="sc1-page">
-          <header className="sc1-page-header">
-            <Link to="/" className="sc1-back-link">{"< MAIN MENU"}</Link>
-            <span className="sc1-page-site-title">{title}</span>
+        <div className="site-page">
+          <header className="site-header">
+            <Link to="/" className="site-back-link">{"← Home"}</Link>
+            <span className="site-header-title">{title}</span>
           </header>
-          <main className="sc1-page-main">{children}</main>
-          <footer className="sc1-page-footer">
+          <main className="site-main">{children}</main>
+          <footer className="site-footer">
             © RASMUS HØJTE
           </footer>
         </div>
