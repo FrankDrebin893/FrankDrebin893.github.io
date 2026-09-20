@@ -1,0 +1,43 @@
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-gh-pages
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        run: npm run build
+
+      - name: Publish build output to gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx gh-pages \
+            --dist public \
+            --dotfiles \
+            --message "Deploy ${{ github.sha }}" \
+            --repo "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" \
+            --user "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
