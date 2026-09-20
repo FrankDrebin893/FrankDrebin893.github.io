@@ -25,8 +25,10 @@ jobs:
           node-version: 18
           cache: npm
 
+      # --legacy-peer-deps is required while gatsby-plugin-sitemap@6 declares a
+      # peer dependency on gatsby@5 and this site runs gatsby@4.
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Build site
         run: npm run build
