@@ -8,7 +8,7 @@ const BlogPostTemplate = ({
   data: { previous, next, site, markdownRemark: post },
   location,
 }) => {
-  const siteTitle = site.siteMetadata?.title || `Title`
+  const siteTitle = site.siteMetadata?.title || `HOJTE.NET`
 
   return (
     <Layout location={location} title={siteTitle}>
@@ -20,28 +20,35 @@ const BlogPostTemplate = ({
         >
           <header>
             <h1 itemProp="headline">{post.frontmatter.title}</h1>
-            <p className="post-article-date">{post.frontmatter.date}</p>
+            <div className="post-meta-row">
+              <time className="post-article-date" dateTime={post.frontmatter.dateIso}>
+                {post.frontmatter.date}
+              </time>
+              {post.timeToRead && <span>{post.timeToRead} min read</span>}
+            </div>
           </header>
           <section
             dangerouslySetInnerHTML={{ __html: post.html }}
             itemProp="articleBody"
           />
         </article>
-        <nav className="post-nav">
+        <nav className="post-nav" aria-label="Article navigation">
           <ul className="post-nav-list">
             <li>
-              {previous && (
-                <Link to={previous.fields.slug} rel="prev">
-                  ← Previous
+              {previous ? (
+                <Link to={previous.fields.slug} rel="prev" className="post-nav-card">
+                  <span className="post-nav-dir">Previous</span>
+                  <span className="post-nav-title">{previous.frontmatter.title}</span>
                 </Link>
-              )}
+              ) : <div />}
             </li>
             <li>
-              {next && (
-                <Link to={next.fields.slug} rel="next">
-                  Next →
+              {next ? (
+                <Link to={next.fields.slug} rel="next" className="post-nav-card post-nav-card--next">
+                  <span className="post-nav-dir">Next</span>
+                  <span className="post-nav-title">{next.frontmatter.title}</span>
                 </Link>
-              )}
+              ) : <div />}
             </li>
           </ul>
         </nav>
@@ -107,6 +114,7 @@ export const pageQuery = graphql`
       id
       excerpt(pruneLength: 160)
       html
+      timeToRead
       fields {
         slug
       }

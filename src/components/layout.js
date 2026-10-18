@@ -14,12 +14,28 @@ const Layout = ({ location, title, children }) => {
       ) : (
         <div className="site-page">
           <header className="site-header">
-            <Link to="/" className="site-back-link">{"← Home"}</Link>
-            <span className="site-header-title">{title}</span>
+            <Link to="/" className="site-back-link">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 5l-7 7 7 7" />
+              </svg>
+              <span>Home</span>
+            </Link>
+            <nav className="site-header-nav" aria-label="Page header navigation">
+              <Link to="/devlog/" className="site-header-link">Blog</Link>
+              <a
+                href="https://github.com/FrankDrebin893"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="site-header-link"
+              >
+                GitHub
+              </a>
+            </nav>
           </header>
           <main className="site-main">{children}</main>
           <footer className="site-footer">
-            © RASMUS HØJTE
+            <span>© RASMUS HØJTE {new Date().getFullYear()}</span>
+            <span className="site-header-title">HOJTE.NET</span>
           </footer>
         </div>
       )}
