@@ -41,10 +41,13 @@
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
+  --radius-xl: 22px;
 
   /* Depth: one system, soft shadow, no borders on raised surfaces */
   --shadow-soft:  0 1px 2px rgba(21, 48, 35, 0.06), 0 10px 26px -10px rgba(21, 48, 35, 0.16);
   --shadow-lift:  0 2px 4px rgba(21, 48, 35, 0.06), 0 18px 34px -12px rgba(21, 48, 35, 0.24);
+  --shadow-sheet: 0 0 0 1px rgba(21, 48, 35, 0.05), 0 2px 5px rgba(21, 48, 35, 0.05), 0 26px 54px -24px rgba(21, 48, 35, 0.28);
+  --shadow-edge:  0 0 0 1px rgba(21, 48, 35, 0.05), 0 14px 26px -16px rgba(21, 48, 35, 0.26);
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -74,9 +77,16 @@ body {
   font-size: 1rem;
   line-height: 1.65;
   color: var(--text);
-  background: var(--bg);
   min-height: 100%;
   caret-color: var(--leaf);
+
+  /* The room the paper lies in: cream, with garden light in two corners */
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(52rem 34rem at 8% -10%, rgba(165, 216, 176, 0.5), transparent 68%),
+    radial-gradient(44rem 30rem at 98% 102%, rgba(207, 233, 111, 0.34), transparent 70%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 ::selection {
@@ -132,6 +142,36 @@ hr {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   PAPER SHEET
+   Every page of content sits on a white sheet, so nothing floats
+   on the bare cream. Things ON the sheet are garden tints.
+───────────────────────────────────────────────────────────── */
+.site-sheet,
+.post-page {
+  position: relative;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sheet);
+}
+
+.site-sheet {
+  padding: 2.5rem 2.75rem 2.75rem;
+}
+
+/* A hint of the pages underneath */
+.site-sheet::before,
+.post-page::before {
+  content: "";
+  position: absolute;
+  inset: auto 1.35rem -0.45rem;
+  height: 1.4rem;
+  background: var(--surface);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  box-shadow: var(--shadow-edge);
+  z-index: -1;
+}
+
+/* ─────────────────────────────────────────────────────────────
    HOME
 ───────────────────────────────────────────────────────────── */
 .site-home {
@@ -140,20 +180,27 @@ hr {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3rem 1.5rem;
-  overflow: hidden;
-  background: var(--bg);
+  padding: 3.5rem 1.5rem;
 }
 
 .site-card {
   position: relative;
-  z-index: 1;
-  width: min(440px, 100%);
+  width: min(460px, 100%);
+  padding: 2.6rem 2.1rem 2.75rem;
   text-align: center;
 }
 
 .site-card-header {
-  margin-bottom: 2.25rem;
+  margin-bottom: 1.6rem;
+}
+
+/* A short lime rule, like a line ruled on the page */
+.site-divider {
+  width: 3.25rem;
+  margin: 0 auto 1.9rem;
+  border: none;
+  border-top: 3px solid var(--lime);
+  border-radius: 2px;
 }
 
 .site-card-title {
@@ -224,17 +271,16 @@ hr {
 .site-nav-list li:nth-child(1) { animation-delay: 0.15s; }
 .site-nav-list li:nth-child(2) { animation-delay: 0.25s; }
 .site-nav-list li:nth-child(3) { animation-delay: 0.35s; }
+.site-nav-list li:nth-child(4) { animation-delay: 0.45s; }
 
 .site-nav-link {
   --tile: var(--leaf);
-  --tile-tint: var(--leaf-tint);
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 0.85rem 1.1rem;
-  background: var(--surface);
+  background: var(--surface-warm);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-soft);
   font-family: var(--font-display);
   font-size: 1.2rem;
   font-weight: 700;
@@ -244,14 +290,16 @@ hr {
   transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), background-color 0.2s ease;
 }
 
-.site-nav-link--blog     { --tile: var(--leaf);    --tile-tint: var(--leaf-tint); }
-.site-nav-link--github   { --tile: var(--ink);      --tile-tint: #e0eadb; }
-.site-nav-link--linkedin { --tile: var(--linkedin); --tile-tint: var(--sky-tint); }
+.site-nav-link--projects { --tile: var(--leaf-text); }
+.site-nav-link--blog     { --tile: var(--leaf); }
+.site-nav-link--github   { --tile: var(--ink); }
+.site-nav-link--linkedin { --tile: var(--linkedin); }
 
+/* Hover lifts a tile off the page and turns it paper white */
 .site-nav-link:hover,
 .site-nav-link:focus-visible {
   color: var(--ink);
-  background: var(--tile-tint);
+  background: var(--surface);
   box-shadow: var(--shadow-lift);
   transform: translateY(-3px);
 }
@@ -366,7 +414,7 @@ hr {
 
 .site-main {
   flex: 1;
-  padding: 2.5rem 0 4rem 0;
+  padding: 2rem 0 3.5rem;
 }
 
 .site-footer {
@@ -381,11 +429,13 @@ hr {
 /* ─────────────────────────────────────────────────────────────
    BLOG INDEX
 ───────────────────────────────────────────────────────────── */
-.post-list-header {
-  margin-bottom: 2.5rem;
+.post-list-header,
+.page-header {
+  margin-bottom: 2.25rem;
 }
 
-.post-list-title {
+.post-list-title,
+.page-title {
   font-family: var(--font-display);
   font-size: clamp(2.6rem, 8vw, 3.75rem);
   font-weight: 800;
@@ -395,7 +445,8 @@ hr {
   margin-bottom: 0.9rem;
 }
 
-.post-list-desc {
+.post-list-desc,
+.page-lede {
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 1.2rem;
@@ -413,16 +464,15 @@ hr {
 
 .post-list-card {
   display: block;
-  background: var(--surface);
+  background: var(--surface-warm);
   border-radius: var(--radius-lg);
   padding: 1.35rem 1.6rem 1.45rem;
-  box-shadow: var(--shadow-soft);
   transition: transform 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out), background-color 0.2s ease;
 }
 
 .post-list-card:hover,
 .post-list-card:focus-visible {
-  background: var(--surface-warm);
+  background: var(--surface);
   box-shadow: var(--shadow-lift);
   transform: translateY(-3px);
 }
@@ -470,13 +520,141 @@ hr {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   PROJECTS
+───────────────────────────────────────────────────────────── */
+.project-group + .project-group {
+  margin-top: 2.75rem;
+}
+
+.project-group-title {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--leaf-text);
+  margin-bottom: 1.1rem;
+}
+
+.project-group-title::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background: var(--line);
+  border-radius: 1px;
+}
+
+.project-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.project-card {
+  background: var(--surface-warm);
+  border-radius: var(--radius-lg);
+  padding: 1.4rem 1.6rem 1.5rem;
+}
+
+.project-card-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-wrap: balance;
+  margin-bottom: 0.55rem;
+}
+
+.project-tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+
+.project-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--leaf-text);
+  background: var(--leaf-tint);
+  padding: 0.24rem 0.6rem;
+  border-radius: 999px;
+}
+
+.project-desc {
+  font-size: 0.97rem;
+  line-height: 1.6;
+  color: var(--text);
+  max-width: 62ch;
+}
+
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 1.15rem;
+}
+
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.95rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--ink);
+  background: var(--surface);
+  border-radius: 999px;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out), background-color 0.2s ease, color 0.15s ease;
+}
+
+.project-link svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.project-link:hover,
+.project-link:focus-visible {
+  color: var(--ink);
+  background: var(--lime-tint);
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-2px);
+}
+
+.project-link--primary {
+  color: #ffffff;
+  background: var(--leaf-text);
+}
+
+.project-link--primary:hover,
+.project-link--primary:focus-visible {
+  color: #ffffff;
+  background: var(--leaf);
+}
+
+.project-note {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.85rem;
+}
+
+/* ─────────────────────────────────────────────────────────────
    ARTICLE
 ───────────────────────────────────────────────────────────── */
 .post-page {
-  background: var(--surface);
-  border-radius: var(--radius-lg);
   padding: 3rem 3.25rem 2.75rem;
-  box-shadow: var(--shadow-soft);
 }
 
 .post-article header {
@@ -682,8 +860,9 @@ pre[class*="language-"] {
 
 .post-nav-card:hover,
 .post-nav-card:focus-visible {
-  background: var(--lime-tint);
+  background: var(--surface);
   color: var(--ink);
+  box-shadow: var(--shadow-lift);
   transform: translateY(-2px);
 }
 
@@ -740,8 +919,20 @@ pre[class*="language-"] {
     padding: 0 1.1rem;
   }
 
+  .site-sheet {
+    padding: 1.7rem 1.25rem 1.9rem;
+  }
+
+  .site-card {
+    padding: 2.1rem 1.3rem 2.3rem;
+  }
+
   .post-page {
     padding: 1.75rem 1.3rem 1.6rem;
+  }
+
+  .project-card {
+    padding: 1.2rem 1.15rem 1.35rem;
   }
 
   .post-article section {

@@ -120,10 +120,10 @@ module.exports = {
         name: `Rasmus Valbro Højte's personal site`,
         short_name: `RVH`,
         start_url: `/`,
-        background_color: `#ffffff`,
+        background_color: `#f4f9ee`,
         // This will impact how browsers show your PWA/website
         // https://css-tricks.com/meta-theme-color-and-trickery/
-        // theme_color: `#663399`,
+        theme_color: `#2c9150`,
         display: `minimal-ui`,
         icon: `src/images/site-icon.png`,
       },

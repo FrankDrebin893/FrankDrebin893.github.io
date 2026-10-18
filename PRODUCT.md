@@ -28,7 +28,11 @@ Desktop and mobile browsers. Readers consume in-depth technical walkthroughs wit
 - Hosted on GitHub Pages at hojte.net.
 - Modern CSS architecture (`src/style.css`) without heavyweight CSS frameworks.
 - Fast hot-reload local development at `http://localhost:8000`.
-- Preserve existing content, routes (`/`, `/devlog/`, `/content/blog/<slug>/`), and SEO metadata.
+- Preserve existing content, routes (`/`, `/projects/`, `/devlog/`, `/content/blog/<slug>/`), and SEO metadata.
+
+## Content Inventory
+
+- `/projects/` lists the work worth linking to, grouped as audio and music, game mods, and web apps. Each entry carries a short description, technology chips, and links out to its site, its GitHub source, its release download, or its Steam Workshop item.
 
 ## Brand Commitments
 

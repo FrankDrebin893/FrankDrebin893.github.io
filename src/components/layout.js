@@ -21,6 +21,7 @@ const Layout = ({ location, title, children }) => {
               <span>Home</span>
             </Link>
             <nav className="site-header-nav" aria-label="Page header navigation">
+              <Link to="/projects/" className="site-header-link">Projects</Link>
               <Link to="/devlog/" className="site-header-link">Blog</Link>
               <a
                 href="https://github.com/FrankDrebin893"
