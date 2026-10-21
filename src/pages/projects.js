@@ -176,7 +176,7 @@ export default ProjectsPage
 export const Head = () => (
   <Seo
     title="Projects — HOJTE.NET"
-    description="Projects by Rasmus Højte: HØJT Audio VST3 and CLAP plugins, a piano MIDI visualization app, Slay the Spire 2 and Hades II mods, and a Spanish vocabulary app."
+    description="Projects by Rasmus Valbro Højte: HØJT Audio VST3 and CLAP plugins, a piano MIDI visualization app, Slay the Spire 2 and Hades II mods, and a Spanish vocabulary app."
     url="https://hojte.net/projects/"
   />
 )

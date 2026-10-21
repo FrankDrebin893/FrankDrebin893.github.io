@@ -102,7 +102,7 @@ export default IndexPage
 
 export const Head = () => (
   <Seo
-    title="HOJTE.NET — Rasmus Højte"
-    description="Personal engineering hub for Rasmus Højte. Software development, cloud architecture, and systems engineering."
+    title="HOJTE.NET — Rasmus Valbro Højte"
+    description="Personal engineering hub for Rasmus Valbro Højte. Software development, cloud architecture, and systems engineering."
   />
 )

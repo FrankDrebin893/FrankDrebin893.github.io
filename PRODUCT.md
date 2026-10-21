@@ -8,11 +8,11 @@ web
 
 ## Users
 
-Software engineers, engineering peers, technical recruiters, audio/music enthusiasts, and visitors seeking practical tech articles (cloud infrastructure, .NET, audio engineering in DAWs, and AI tooling) and Rasmus Højte's creative work.
+Software engineers, engineering peers, technical recruiters, audio/music enthusiasts, and visitors seeking practical tech articles (cloud infrastructure, .NET, audio engineering in DAWs, and AI tooling) and Rasmus Valbro Højte's creative work.
 
 ## Product Purpose
 
-Serve as the central home for Rasmus Højte (HOJTE.NET): an authoritative, fast-loading, and polished personal engineering and creative hub featuring technical articles, music/video projects, and professional links.
+Serve as the central home for Rasmus Valbro Højte (HOJTE.NET): an authoritative, fast-loading, and polished personal engineering and creative hub featuring technical articles, music/video projects, and professional links.
 
 ## Positioning
 
@@ -36,7 +36,7 @@ Desktop and mobile browsers. Readers consume in-depth technical walkthroughs wit
 
 ## Brand Commitments
 
-- Name: HOJTE.NET / Rasmus Højte
+- Name: HOJTE.NET / Rasmus Valbro Højte
 - Tone: Crisp, technically sharp, authentic, understated confidence.
 - Visual character: Elegant, purposeful dark mode, refined typography, and subtle micro-interactions without AI-generated UI clichés (no side-tab accent lines, gratuitous gradients, or cookie-cutter cards).
 

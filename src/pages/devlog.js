@@ -52,7 +52,7 @@ export default DevlogPage
 export const Head = () => (
   <Seo
     title="Blog — HOJTE.NET"
-    description="Technical devlog and engineering notes by Rasmus Højte covering cloud infrastructure, .NET, DAW automation, and software architecture."
+    description="Technical devlog and engineering notes by Rasmus Valbro Højte covering cloud infrastructure, .NET, DAW automation, and software architecture."
   />
 )
 

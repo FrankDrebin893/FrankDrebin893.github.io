@@ -35,7 +35,7 @@ const Layout = ({ location, title, children }) => {
           </header>
           <main className="site-main">{children}</main>
           <footer className="site-footer">
-            <span>© RASMUS HØJTE {new Date().getFullYear()}</span>
+            <span>© RASMUS VALBRO HØJTE {new Date().getFullYear()}</span>
             <span className="site-header-title">HOJTE.NET</span>
           </footer>
         </div>

@@ -22,6 +22,10 @@ const Seo = ({ description, title, type, image, url, children }) => {
 
   const metaDescription = description || site.siteMetadata.description
   const defaultTitle = site.siteMetadata?.title
+  const fullTitle =
+    defaultTitle && !title.includes(defaultTitle)
+      ? `${title} | ${defaultTitle}`
+      : title
   const siteUrl = site.siteMetadata?.siteUrl
   const ogImage = image
     ? image.startsWith("http")
@@ -32,7 +36,7 @@ const Seo = ({ description, title, type, image, url, children }) => {
 
   return (
     <>
-      <title>{defaultTitle ? `${title} | ${defaultTitle}` : title}</title>
+      <title>{fullTitle}</title>
       <meta name="description" content={metaDescription} />
       <link rel="canonical" href={canonicalUrl} />
       <meta property="og:title" content={title} />
