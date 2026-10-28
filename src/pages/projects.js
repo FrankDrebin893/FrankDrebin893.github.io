@@ -45,12 +45,13 @@ const groups = [
     title: "Audio & music",
     projects: [
       {
-        name: "HØJT Audio",
+        name: "HØJT DSP",
         tags: ["Rust", "VST3 · CLAP", "Win · macOS · Linux"],
         description:
-          "Free plugins for guitar, drums, bass and keys, each drawn as a stompbox. A guitar rig with four amps of my own design and ten pedals that can be dragged into another order, a drum kit whose every sound is made in the plugin instead of sampled, a pitch shifter quick enough to play through live, and three synths. HØJT is Danish for loud, and for high.",
+          "Six free plugins for guitar, drums, bass and keys, each drawn as a stompbox. A guitar rig with four amps of my own design and ten pedals that can be dragged into another order, a drum kit whose every sound is made in the plugin instead of sampled, a pitch shifter quick enough to play through live, a plucked bass, an ambient pad and glass bells.",
+        note: "Part of HØJT, Danish for loud and for high: these plugins, the piano viz and the chord atlases below share one home at hojte.net/hojt-audio.",
         links: [
-          { kind: "site", label: "Plugins & sound examples", href: "https://hojte.net/hojt-audio/", primary: true },
+          { kind: "site", label: "Plugins & sound examples", href: "https://hojte.net/hojt-audio/dsp/", primary: true },
           { kind: "download", label: "Latest release", href: "https://github.com/FrankDrebin893/hojt-audio/releases/latest" },
           { kind: "github", label: "Source", href: "https://github.com/FrankDrebin893/hojt-audio" },
         ],
@@ -61,8 +62,18 @@ const groups = [
         description:
           "A desktop app for practising at a MIDI keyboard. It plays your keys through any SoundFont or SFZ piano at ASIO latency and names what you are holding — the chord, its inversion, its Roman numeral in the key — on a 61-key keyboard, a grand staff and the circle of fifths. It also runs falling-note practice for MIDI songs, records takes, and builds chord progressions you can play back.",
         links: [
-          { kind: "download", label: "Download for Windows", href: "https://github.com/FrankDrebin893/PianoVisualization/releases/latest", primary: true },
-          { kind: "github", label: "Source", href: "https://github.com/FrankDrebin893/PianoVisualization" },
+          { kind: "site", label: "Page & download", href: "https://hojte.net/hojt-audio/piano/", primary: true },
+          { kind: "github", label: "Source", href: "https://github.com/FrankDrebin893/hojt-audio/tree/main/piano" },
+        ],
+      },
+      {
+        name: "Guitar & Piano Chord Atlas",
+        tags: ["Browser", "Mobile"],
+        description:
+          "34 chord types in all 12 keys, from power chords to altered dominants. On the guitar: movable and open shapes with fingers, intervals or note names on every dot. On the piano: root position or any inversion, two-hand voicings and a fingering for each, and a tap plays the chord. Free, in the browser, nothing to install.",
+        links: [
+          { kind: "site", label: "Open the atlases", href: "https://hojte.net/hojt-audio/resources/", primary: true },
+          { kind: "github", label: "Source", href: "https://github.com/FrankDrebin893/hojt-audio/tree/main/site/resources" },
         ],
       },
     ],
@@ -133,7 +144,7 @@ const ProjectsPage = ({ location }) => {
         <div className="page-header">
           <h1 className="page-title">Projects</h1>
           <p className="page-lede">
-            What I build outside work: audio plugins, a practice tool for the piano, mods for the
+            What I build outside work: audio plugins, tools for practising piano and guitar, mods for the
             games I keep coming back to, and the odd web app. Source for all of it is on GitHub.
           </p>
         </div>
@@ -176,7 +187,7 @@ export default ProjectsPage
 export const Head = () => (
   <Seo
     title="Projects — HOJTE.NET"
-    description="Projects by Rasmus Valbro Højte: HØJT Audio VST3 and CLAP plugins, a piano MIDI visualization app, Slay the Spire 2 and Hades II mods, and a Spanish vocabulary app."
+    description="Projects by Rasmus Valbro Højte: the HØJT DSP VST3 and CLAP plugins, a piano MIDI visualization app, guitar and piano chord atlases, Slay the Spire 2 and Hades II mods, and a Spanish vocabulary app."
     url="https://hojte.net/projects/"
   />
 )
