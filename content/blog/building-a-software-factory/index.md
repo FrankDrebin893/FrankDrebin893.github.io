@@ -1,5 +1,5 @@
 ---
-title: Building a software factory, one feedback loop at a time
+title: Building a software factory on an audio plugin
 date: "2026-11-14"
 description: What I learned turning my hobby repository into a small software factory, from agent stations and feedback loops to least privilege, human gates and where the limits still show.
 ---
@@ -78,8 +78,14 @@ A gate is only worth something if the human actually looks. That's why every aut
 
 Running this on an audio plugin suite has also made the current limits very clear.
 
-First, there's the environment gap. Because the repository is public, I'm lucky to have free access to GitHub-hosted runners on Windows, macOS and Linux. Even so, cloud runners can't test everything. I haven't set up local test machines for macOS and Linux, and on Windows there are still things that require real audio hardware, a real display or a human ear. Almost every day I check in and find issues waiting on me to test something locally or listen to the rendered output of a plugin — which also tests the limits of my ability to describe sound in a way an LLM can actually work with. I can let Claude take control of my machine and run a lot of that testing, but doing it properly has turned out to be quite time-consuming.
+### The environment gap and local testing
 
-Second, UI and visual design have been much harder than I expected. I've tried different design skills across both Claude and Antigravity to see how far I could push the styling of the plugins and the app. The UI is functional at the very least and fits my current needs, though I wouldn't say I'm super happy with it and I'm still looking for better ways to improve the design. Even getting to this point took far more effort than anticipated, and I've been surprised by how poor the models' visual judgement can be. Even when given several passes to render and critique their own designs, they still leave obvious visual flaws behind. That has been a bit puzzling to reconcile with interviews from technical staff at labs like Anthropic saying you just need to demand more of newer models and hand them bigger goals. On the coding side, that has very much been my experience — on UI design, not so much.
+Because the repository is public, I'm lucky to have free access to GitHub-hosted runners on Windows, macOS and Linux. Even so, cloud runners can't test everything. I haven't set up local test machines for macOS and Linux, and on Windows there are still things that require real audio hardware, a real display or a human ear. Almost every day I check in and find issues waiting on me to test something locally or listen to the rendered output of a plugin — which also tests the limits of my ability to describe sound in a way an LLM can actually work with. I can let Claude take control of my machine and run a lot of that testing, but doing it properly has turned out to be quite time-consuming.
 
-Finally, some problems still need manual intervention — or a better model. The pitch shifter is a good example. After several iterations on the DSP engine using Opus 5.5, I still wasn't happy with how it handled chords and sustained notes. When Fable 5.2 was released, I stepped in and had the pitch shifter engine redone from scratch with it. That produced a much better result, even though stepping in like that isn't something I'd normally want to do once the factory is running.
+### UI and visual design
+
+UI and visual design have been much harder than I expected. I've tried different design skills across both Claude and Antigravity to see how far I could push the styling of the plugins and the app. The UI is functional at the very least and fits my current needs, though I wouldn't say I'm super happy with it and I'm still looking for better ways to improve the design. Even getting to this point took far more effort than anticipated, and I've been surprised by how poor the models' visual judgement can be. Even when given several passes to render and critique their own designs, they still leave obvious visual flaws behind. That has been a bit puzzling to reconcile with interviews from technical staff at labs like Anthropic saying you just need to demand more of newer models and hand them bigger goals. On the coding side, that has very much been my experience — on UI design, not so much.
+
+### Knowing when to step in manually
+
+Some problems still need manual intervention — or a better model. The pitch shifter is a good example. After several iterations on the DSP engine using Opus 5.5, I still wasn't happy with how it handled chords and sustained notes. When Fable 5.2 was released, I stepped in and had the pitch shifter engine redone from scratch with it. That produced a much better result, even though stepping in like that isn't something I'd normally want to do once the factory is running.
