@@ -64,7 +64,7 @@
   <path class="flow" d="M455,320 L455,348"/>
   <rect class="human" x="295" y="350" width="320" height="60" rx="8"/>
   <text class="t" x="455" y="375">Owner approves the spec</text>
-  <text class="s" x="455" y="395">approval-guard strips anyone else's approval</text>
+  <text class="s" x="455" y="395">only the owner can approve; others are stripped</text>
 
   <path class="flow" d="M455,410 L455,438"/>
   <rect class="state" x="325" y="440" width="260" height="40" rx="20"/>
@@ -97,7 +97,7 @@
 
   <path class="flow" d="M455,660 L455,688"/>
   <rect class="state" x="325" y="690" width="260" height="40" rx="20"/>
-  <text class="st" x="455" y="715">auto-merge to main</text>
+  <text class="st" x="455" y="715">Auto-merge</text>
 
   <!-- Release prep -->
   <path class="flow" d="M455,730 L455,758"/>
@@ -113,7 +113,7 @@
 
   <path class="flow" d="M455,910 L455,938"/>
   <rect class="script" x="295" y="940" width="320" height="60" rx="8"/>
-  <text class="t" x="455" y="965">Release build (release.yml)</text>
+  <text class="t" x="455" y="965">Release build</text>
   <text class="s" x="455" y="985">tests the installer, then publishes</text>
 
   <!-- Release review -->
