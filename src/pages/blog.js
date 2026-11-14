@@ -3,7 +3,7 @@ import { Link, graphql } from "gatsby"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
-const DevlogPage = ({ data, location }) => {
+const BlogPage = ({ data, location }) => {
   const siteTitle = data.site.siteMetadata?.title || `HOJTE.NET`
   const posts = data.allMarkdownRemark.nodes
 
@@ -47,12 +47,13 @@ const DevlogPage = ({ data, location }) => {
   )
 }
 
-export default DevlogPage
+export default BlogPage
 
 export const Head = () => (
   <Seo
     title="Blog — HOJTE.NET"
     description="Technical devlog and engineering notes by Rasmus Valbro Højte covering cloud infrastructure, .NET, DAW automation, and software architecture."
+    url="https://hojte.net/blog/"
   />
 )
 

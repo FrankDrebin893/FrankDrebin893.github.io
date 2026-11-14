@@ -14,7 +14,7 @@ const NotFoundPage = ({ data, location }) => {
           <h1 className="page-title">404</h1>
           <p className="page-lede">
             There is no page at this address. Try the <Link to="/projects/">projects</Link> or the{" "}
-            <Link to="/devlog/">blog</Link>.
+            <Link to="/blog/">blog</Link>.
           </p>
         </div>
       </div>

@@ -25,8 +25,8 @@ Gatsby 4 static site with Markdown content, deployed to GitHub Pages at hojte.ne
 
 **Pages**
 - `src/pages/index.js` — root landing page (centered nav card linking to Blog + external profiles)
-- `src/pages/devlog.js` — post list page (displayed as "Blog", route stays `/devlog/`), queries all `MarkdownRemark` nodes sorted by date DESC
-- `src/templates/blog-post.js` — individual post view; includes JSON-LD `BlogPosting` schema in `<Head>`
+- `src/pages/blog.js` — post list page at `/blog/`, queries all `MarkdownRemark` nodes sorted by date DESC
+- `src/templates/blog-post.js` — individual post view at `/blog/<slug>/`; includes JSON-LD `BlogPosting` schema in `<Head>`
 
 **Components**
 - `layout.js` — two-mode wrapper: root path renders a full-screen `site-home`, all other paths render `site-page` with a back-to-home header and footer

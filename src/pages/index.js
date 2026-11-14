@@ -58,7 +58,7 @@ const IndexPage = ({ location }) => {
               </Link>
             </li>
             <li>
-              <Link className="site-nav-link site-nav-link--blog" to="/devlog/">
+              <Link className="site-nav-link site-nav-link--blog" to="/blog/">
                 <span className="site-nav-icon" aria-hidden="true">
                   <BlogIcon />
                 </span>

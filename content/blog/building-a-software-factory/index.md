@@ -4,7 +4,7 @@ date: "2026-11-14"
 description: What I learned turning my hobby repository into a small software factory, from agent stations and feedback loops to least privilege, human gates and where the limits still show.
 ---
 
-In my [last post](/ai-a-year-in-review/) I wrote that cloud-run agentic workflows were the next step for me. Since then I've built one for my audio plugin hobby project, [HØJT](https://github.com/FrankDrebin893/hojt-audio).
+In my [last post](/blog/ai-a-year-in-review/) I wrote that cloud-run agentic workflows were the next step for me. Since then I've built one for my audio plugin hobby project, [HØJT](https://github.com/FrankDrebin893/hojt-audio).
 
 Lately, I've been very interested in the idea of a *software factory*. Ideas go in one end, released changes come out the other, and agents do most of the work in between. The interesting shift is that the factory itself becomes the thing you work on. It makes it essential to constantly think about process. Process flows that would normally seem naive or overly idealistic — because all the manual steps and handoffs would put far too much cognitive load on developers — become practical when you can model the whole flow and hand it over to agents. While you can still get involved in the code, your main focus shifts to understanding the architecture and design of the solution, what it needs to be properly tested, deployed and informed by user feedback, and making sure the process runs smoothly so you can achieve a much higher output. And the better that process gets, the easier it becomes to transfer that knowledge to other systems — which, in my opinion, might be just about any system.
 

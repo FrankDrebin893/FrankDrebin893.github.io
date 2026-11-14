@@ -28,7 +28,7 @@ Desktop and mobile browsers. Readers consume in-depth technical walkthroughs wit
 - Hosted on GitHub Pages at hojte.net.
 - Modern CSS architecture (`src/style.css`) without heavyweight CSS frameworks.
 - Fast hot-reload local development at `http://localhost:8000`.
-- Preserve existing content, routes (`/`, `/projects/`, `/devlog/`, `/content/blog/<slug>/`), and SEO metadata.
+- Preserve existing content, routes (`/`, `/projects/`, `/blog/`, `/blog/<slug>/`), and SEO metadata.
 
 ## Content Inventory
 
