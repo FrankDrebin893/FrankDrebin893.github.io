@@ -20,11 +20,11 @@ The whole thing runs on plain GitHub and my Claude Code Pro subscription: issues
 |-------|---------|--------------|
 | **Intake** | Scout agent, weekly checks, users | Weekly market ideas, automated housekeeping findings and user issues enter the backlog |
 | **Refinement** | Specwriter agent | Grooms the backlog daily, interviews outside reporters when details are missing, and writes concrete specs in fresh sessions |
-| **Gate 1** | Owner | I review and approve specs on a single pinned issue before any code is written |
+| **First gate: Approval** | Owner | I review and approve specs on a single pinned issue before any code is written |
 | **Build** | Builder agent | Works through approved issues nightly, each in a fresh session and isolated worktree |
 | **Review & retro** | Reviewer & Retrospective agents | Two fresh sessions score the diff against the spec (seeing only the spec and diff) and inspect the build transcript for friction |
 | **Merge** | Pull request + CI | Cross-platform tests, linting and sound diffs gate an automatic merge |
-| **Release & Gate 2** | Release Manager + owner | Prepares the release PR, changelog, audio renders and a manual verification checklist; I validate and tag to publish |
+| **Second gate: Release** | Release Manager + owner | Prepares the release PR, changelog, audio renders and a manual verification checklist; I validate and tag to publish |
 | **Post-release** | Release Analyst + health script | Reviews downloads, bugs and feedback 7 and 28 days later and files follow-up ideas into the backlog |
 
 ### The issue tracker is the factory floor
